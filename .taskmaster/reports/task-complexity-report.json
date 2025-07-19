@@ -1,0 +1,133 @@
+{
+	"meta": {
+		"generatedAt": "2025-07-04T22:10:25.535Z",
+		"tasksAnalyzed": 15,
+		"totalTasks": 15,
+		"analysisCount": 15,
+		"thresholdScore": 5,
+		"projectName": "Taskmaster",
+		"usedResearch": true
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 1,
+			"taskTitle": "Setup Project Repository and Environment",
+			"complexityScore": 3,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Break down the environment setup into subtasks such as: initializing the repository, creating the virtual environment, installing dependencies, configuring version control (.gitignore, README), and setting up dependency management tools.",
+			"reasoning": "This task involves standard project setup steps with low algorithmic complexity but multiple discrete actions. Each step is straightforward but necessary for a robust foundation."
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "Implement YAML Configuration System",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand into subtasks for schema definition, YAML parsing, validation logic, and error handling.",
+			"reasoning": "Requires designing a flexible schema, implementing parsing and validation, and handling user errors. Moderate complexity due to the need for robust validation and flexibility."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "Build Search Result Scraper for 11880.com",
+			"complexityScore": 7,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Divide into subtasks: browser automation setup, search navigation, pagination handling, result extraction, raw HTML storage, and structured data output.",
+			"reasoning": "Involves browser automation, dynamic navigation, and data extraction. Complexity arises from handling site structure, pagination, and ensuring reliable scraping."
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "Implement Company Data Extraction Logic",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand into subtasks for parsing each data field (name, address, phone, etc.), handling dynamic content, selector robustness, and missing data handling.",
+			"reasoning": "Requires precise HTML parsing, robust selectors, and error handling for missing or inconsistent data. Moderate to high complexity due to variability in data presentation."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "Develop Email Extraction Module",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Break down into subtasks for HTTP/JS fetching, regex extraction, HTML parsing, email validation, and multi-method extraction logic.",
+			"reasoning": "Involves multiple extraction techniques, validation, and handling diverse website structures. Complexity is moderate due to the need for accuracy and adaptability."
+		},
+		{
+			"taskId": 6,
+			"taskTitle": "Implement Anti-Detection Measures",
+			"complexityScore": 8,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand into subtasks for IP rotation, user agent rotation, request delays, browser fingerprint randomization, proxy integration, and detection monitoring.",
+			"reasoning": "High complexity due to the need for coordinated anti-detection strategies, integration with external services, and ongoing monitoring of effectiveness."
+		},
+		{
+			"taskId": 7,
+			"taskTitle": "Build Retry and Error Handling Framework",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Divide into subtasks for retry logic, exponential backoff, error logging, session recovery, and progress persistence.",
+			"reasoning": "Requires robust error handling, state management, and logging. Moderate complexity due to the need for resilience and reliability."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "Develop Parallel Processing Engine",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand into subtasks for concurrency model selection, task scheduling, resource management, error handling in parallel tasks, and performance monitoring.",
+			"reasoning": "Concurrency introduces complexity in resource management, error handling, and ensuring thread/process safety."
+		},
+		{
+			"taskId": 9,
+			"taskTitle": "Implement Data Storage and Deduplication",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down into subtasks for data formatting, deduplication logic, validation, and CSV export.",
+			"reasoning": "Standard data processing with moderate complexity due to deduplication and validation requirements."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "Add Monitoring and Logging",
+			"complexityScore": 4,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand into subtasks for logging setup, statistics collection, performance monitoring, and log storage/rotation.",
+			"reasoning": "Routine implementation but important for maintainability and debugging. Low to moderate complexity."
+		},
+		{
+			"taskId": 11,
+			"taskTitle": "Build Configuration UI and Export Customization",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Divide into subtasks for extending YAML schema, CLI/UI development, export format customization, and user input validation.",
+			"reasoning": "Moderate complexity due to user interface considerations and flexible configuration handling."
+		},
+		{
+			"taskId": 12,
+			"taskTitle": "Implement Comprehensive Test Suite",
+			"complexityScore": 7,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand into subtasks for unit tests, integration tests, mocking external dependencies, coverage analysis, test data setup, and CI integration.",
+			"reasoning": "High complexity due to the breadth of modules, need for mocks, and ensuring high coverage across diverse functionalities."
+		},
+		{
+			"taskId": 13,
+			"taskTitle": "Document Code and Usage",
+			"complexityScore": 4,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down into subtasks for API documentation, user guides, configuration examples, and troubleshooting sections.",
+			"reasoning": "Documentation is straightforward but requires thoroughness and clarity. Low to moderate complexity."
+		},
+		{
+			"taskId": 14,
+			"taskTitle": "Optimize Performance and Resource Usage",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand into subtasks for profiling, bottleneck identification, optimization of code/data structures, request batching, and caching implementation.",
+			"reasoning": "Requires analysis, targeted optimizations, and validation. Moderate to high complexity depending on bottlenecks found."
+		},
+		{
+			"taskId": 15,
+			"taskTitle": "Prepare for Deployment and Maintenance",
+			"complexityScore": 5,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Divide into subtasks for CI/CD pipeline setup, monitoring dashboard configuration, alerting setup, maintenance planning, and dependency update procedures.",
+			"reasoning": "Moderate complexity due to integration with external tools and planning for long-term maintainability."
+		}
+	]
+}

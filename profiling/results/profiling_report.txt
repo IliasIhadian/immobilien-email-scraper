@@ -1,0 +1,4 @@
+=== Scraper Profiling Report ===
+
+
+Profile data saved in individual function profile files.

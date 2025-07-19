@@ -1,0 +1,53 @@
+# 11880.com Email Scraper Configuration
+
+# Target settings
+target:
+  base_url: "https://www.11880.com"
+  search_term: "Hausverwaltungen"
+  location: "Düsseldorf"
+  
+# Browser settings
+browser:
+  headless: true
+  timeout: 30000
+  viewport:
+    width: 1920
+    height: 1080
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+# Scraping behavior
+scraping:
+  delay_between_requests:
+    min: 2
+    max: 5
+  retry_attempts: 3
+  retry_delay: 10
+  max_pages: 50
+  concurrent_requests: 3
+
+# Email extraction
+email:
+  extract_from_detail_page: true
+  extract_from_website: true
+  extract_from_impressum: true
+  email_validation: true
+  timeout_per_website: 15
+
+# Data export
+export:
+  format: "csv"
+  filename: "hausverwaltungen_duesseldorf_{timestamp}.csv"
+  columns:
+    - "firma"
+    - "adresse" 
+    - "website"
+    - "email"
+  include_timestamp: true
+  remove_duplicates: true
+
+# Logging
+logging:
+  level: "INFO"
+  log_to_file: true
+  log_file: "logs/scraper_{date}.log"
+  max_log_files: 10 

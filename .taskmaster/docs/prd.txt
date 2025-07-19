@@ -1,0 +1,118 @@
+# Product Requirements Document: 11880.com E-Mail-Scraper für Hausverwaltungen
+
+## Projektübersicht
+Entwicklung eines Python-basierten Web-Scrapers, der automatisiert E-Mail-Adressen von Hausverwaltungen in Düsseldorf von der Website 11880.com sammelt. Der Scraper soll zuverlässig, effizient und robust arbeiten.
+
+## Zielgruppe
+- Immobilienbranche
+- Bauunternehmen
+- Marketing-Teams, die B2B-Kontakte in der Hausverwaltungsbranche suchen
+
+## Hauptfunktionalitäten
+
+### 1. Automatische Navigation
+- Selbstständige Navigation auf 11880.com
+- Automatische Suche nach "Hausverwaltungen" in "Düsseldorf"
+- Dynamisches Laden von Inhalten berücksichtigen (Scrollen, Pagination)
+- Durchlaufen aller verfügbaren Ergebnisseiten
+
+### 2. Datenextraktion
+Für jeden Firmeneintrag sollen folgende Informationen extrahiert werden:
+- **Firmenname** (Pflichtfeld)
+- **Adresse** (Pflichtfeld)
+- **Website** (optional, falls angegeben)
+- **E-Mail-Adresse** (Pflichtfeld, höchste Priorität)
+
+### 3. E-Mail-Sammlung Strategien
+- Primär: Direkte Extraktion von 11880.com
+- Sekundär: Automatischer Besuch der Firmen-Website
+- Tertiär: Impressum-Analyse für E-Mail-Adressen
+- Implementierung von Fallback-Mechanismen
+
+### 4. Datenexport
+- Automatische Speicherung als CSV-Datei
+- Spalten: Firma, Adresse, Website, E-Mail
+- Datums- und Zeitstempel für Tracking
+- Duplikatsvermeidung
+
+### 5. Performance & Robustheit
+- Playwright mit Headless Chromium Browser
+- Angemessene Wartezeiten für dynamische Inhalte
+- Fehlerbehandlung für verschiedene Szenarien
+- Human-ähnliches Timing zwischen Requests
+- IP-Schutz durch intelligente Delays
+
+## Technische Anforderungen
+
+### Framework & Bibliotheken
+- **Python 3.8+**
+- **Playwright** für Browser-Automatisierung
+- **Pandas** für Datenverarbeitung
+- **BeautifulSoup4** für HTML-Parsing
+- **Requests** für HTTP-Anfragen
+- **CSV-Modul** für Datenexport
+
+### Architektur
+- Modularer, objektorientierter Aufbau
+- Wiederverwendbare Funktionen
+- Konfigurierbare Parameter
+- Logging für Debugging und Monitoring
+
+### Browser-Konfiguration
+- Headless-Modus für Performance
+- User-Agent Rotation für Anonymität
+- Cookie und Session Management
+- Viewport-Konfiguration
+
+## Qualitätsanforderungen
+
+### Zuverlässigkeit
+- Mindestens 95% erfolgreiche Datenextraktion
+- Graceful Degradation bei Fehlern
+- Retry-Mechanismen für fehlerhafte Requests
+- Umfassendes Error Logging
+
+### Performance
+- Maximal 2-5 Sekunden Delay zwischen Anfragen
+- Effiziente Speichernutzung
+- Parallele Verarbeitung wo möglich
+- Fortschrittsverfolgung
+
+### Wartbarkeit
+- Gut dokumentierter, kommentierter Code
+- Konfigurierbare Selektoren
+- Einfache Anpassung an Website-Änderungen
+- Modulare Struktur für Erweiterungen
+
+## Compliance & Best Practices
+
+### Web-Scraping Ethik
+- Respektierung von robots.txt
+- Angemessene Request-Frequenz
+- Keine Überlastung der Ziel-Website
+- User-Agent Identifikation
+
+### Rechtliche Aspekte
+- Einhaltung der DSGVO
+- Respektierung von Copyright
+- Nur öffentlich verfügbare Daten
+- Dokumentation der Datenquellen
+
+## Erfolg-Kriterien
+1. **Funktionalität**: Vollständige Automatisierung des Scraping-Prozesses
+2. **Datenqualität**: Mindestens 90% valide E-Mail-Adressen
+3. **Stabilität**: Läuft mindestens 2 Stunden ohne Absturz
+4. **Vollständigkeit**: Erfassung aller verfügbaren Hausverwaltungen in Düsseldorf
+5. **Benutzerfreundlichkeit**: Einfache Konfiguration und Ausführung
+
+## Risiken & Mitigation
+- **Website-Änderungen**: Flexible Selektoren und regelmäßige Updates
+- **IP-Blocking**: Proxy-Rotation und intelligente Delays
+- **Rechtliche Probleme**: Einhaltung aller relevanten Gesetze
+- **Performance-Probleme**: Optimierung und Monitoring
+
+## Zeitplan
+- **Woche 1**: Setup, Grundstruktur, Navigation
+- **Woche 2**: Datenextraktion, E-Mail-Sammlung
+- **Woche 3**: Robustheit, Fehlerbehandlung, Testing
+- **Woche 4**: Optimierung, Dokumentation, Deployment 

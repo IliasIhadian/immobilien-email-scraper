@@ -1,0 +1,35 @@
+baseline:
+  avg_time_per_url: 2.503529562498443
+  failed_requests: 0
+  memory_usage: 0
+  successful_requests: 2
+  total_time: 5.007059124996886
+  urls_processed: 2
+high_volume:
+  avg_time_per_url: 1.502893383312039
+  failed_requests: 0
+  memory_usage: 0
+  successful_requests: 10
+  total_time: 15.02893383312039
+  urls_processed: 10
+minimal_delay:
+  avg_time_per_url: 1.0027194170979783
+  failed_requests: 0
+  memory_usage: 0
+  successful_requests: 2
+  total_time: 2.0054388341959566
+  urls_processed: 2
+mixed_locations:
+  avg_time_per_url: 2.5024765556833395
+  failed_requests: 0
+  memory_usage: 0
+  successful_requests: 3
+  total_time: 7.507429667050019
+  urls_processed: 3
+no_email:
+  avg_time_per_url: 2.0015240834327415
+  failed_requests: 0
+  memory_usage: 0
+  successful_requests: 2
+  total_time: 4.003048166865483
+  urls_processed: 2

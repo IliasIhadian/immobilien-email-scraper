@@ -1,0 +1,523 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Project Repository and Environment",
+        "description": "Initialize project repository with Python 3.10+ environment, install core dependencies, and set up version control.",
+        "details": "Create a new Python project using venv or conda. Install dependencies: requests (2.31.0), beautifulsoup4 (4.12.2), playwright (1.42.0), pandas (2.1.0), pyyaml (6.0.1). Set up .gitignore and README. Use pip-tools or poetry for dependency management.",
+        "testStrategy": "Verify environment setup by running a simple script and checking installed package versions.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Implement YAML Configuration System",
+        "description": "Develop a YAML-based configuration system for scraping parameters, proxy settings, and export options.",
+        "details": "Use pyyaml (6.0.1) to parse YAML config files. Define schema for search queries, proxy lists, output formats, and scraping limits. Implement config validation.",
+        "testStrategy": "Test config loading, validation, and error handling with various YAML files.",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Build Search Result Scraper for 11880.com",
+        "description": "Develop a scraper to navigate and extract company listings from 11880.com search results.",
+        "details": "Use playwright (1.42.0) for browser automation. Implement search navigation, pagination handling, and raw HTML storage. Store results in a structured format.",
+        "testStrategy": "Test pagination, result extraction, and HTML storage with sample queries.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Implement Company Data Extraction Logic",
+        "description": "Extract company details (name, address, phone, website, business hours, metadata) from listings.",
+        "details": "Use beautifulsoup4 (4.12.2) and playwright (1.42.0) for HTML parsing and dynamic content. Implement robust selectors for each data field. Handle missing data gracefully.",
+        "testStrategy": "Validate extraction accuracy and completeness with sample listings.",
+        "priority": "high",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Develop Email Extraction Module",
+        "description": "Extract email addresses from company websites using multiple methods.",
+        "details": "Use requests (2.31.0) and playwright (1.42.0) for HTTP requests and JS rendering. Implement regex and HTML parsing for email extraction. Validate email formats.",
+        "testStrategy": "Test email extraction from various website structures and validate email formats.",
+        "priority": "high",
+        "dependencies": [
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Implement Anti-Detection Measures",
+        "description": "Add IP rotation, user agent rotation, request delays, and browser fingerprint randomization.",
+        "details": "Use playwright (1.42.0) for browser context management. Integrate proxy rotation (e.g., via proxy lists or services like ScraperAPI). Randomize delays and user agents. Implement browser fingerprint randomization[3][1].",
+        "testStrategy": "Test detection avoidance by monitoring block rates and request success.",
+        "priority": "high",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement IP Rotation",
+            "description": "Set up a system to rotate outgoing IP addresses for each request to avoid detection and blocking by target websites.",
+            "dependencies": [],
+            "details": "Integrate with proxy providers or use a proxy pool. Ensure the system can switch IPs per request or session, and handle proxy failures gracefully.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Develop User Agent Rotation Mechanism",
+            "description": "Create a robust user agent rotation strategy to mimic requests from various browsers and devices.",
+            "dependencies": [],
+            "details": "Build a diverse pool of user agent strings, including different browsers, devices, and versions. Implement intelligent rotation algorithms (frequency-based, context-aware, time-based) to select user agents for each request.[1][2][3][4][5]",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Integrate Request Delays and Throttling",
+            "description": "Introduce randomized delays between requests to simulate human browsing behavior and reduce the risk of detection.",
+            "dependencies": [],
+            "details": "Implement logic to add variable sleep intervals between requests, possibly adapting delay based on target site response or rate limits.[4]",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Randomize Browser Fingerprints",
+            "description": "Develop techniques to randomize browser fingerprinting parameters to evade advanced anti-bot systems.",
+            "dependencies": [],
+            "details": "Modify or spoof browser characteristics such as screen size, language, timezone, plugins, and canvas/webGL fingerprints. Integrate with browser automation tools (e.g., Selenium, Puppeteer) for realistic fingerprint randomization.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Integrate Proxy Management",
+            "description": "Set up and manage proxy servers to support IP rotation and ensure reliable, anonymous connections.",
+            "dependencies": [
+              1
+            ],
+            "details": "Select and configure proxy providers, monitor proxy health, and implement automatic failover or replacement for non-working proxies.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Implement Detection Monitoring and Response",
+            "description": "Monitor for signs of detection or blocking and adapt strategies in real time to maintain scraping effectiveness.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "Track response codes, CAPTCHAs, and behavioral anomalies. Trigger alerts or automatic adjustments (e.g., increase delays, switch proxies, update user agents) when detection is suspected.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Build Retry and Error Handling Framework",
+        "description": "Implement comprehensive retry logic, error recovery, and logging.",
+        "details": "Use exponential backoff for retries. Log errors and retry attempts. Implement session recovery and progress persistence.",
+        "testStrategy": "Test error handling by simulating network failures and timeouts.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Develop Parallel Processing Engine",
+        "description": "Enable parallel scraping for improved performance.",
+        "details": "Use concurrent.futures or asyncio with playwright (1.42.0) for parallel requests. Manage resource limits and avoid overloading the target site.",
+        "testStrategy": "Test parallel execution and monitor resource usage.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Data Storage and Deduplication",
+        "description": "Store extracted data in CSV format with deduplication and validation.",
+        "details": "Use pandas (2.1.0) for data manipulation and CSV export. Implement deduplication based on unique identifiers. Validate data before export.",
+        "testStrategy": "Test data export, deduplication, and validation with sample datasets.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Add Monitoring and Logging",
+        "description": "Implement logging, statistics collection, and performance monitoring.",
+        "details": "Use Python logging module for detailed logs. Track success/failure rates, scraping speed, and resource usage. Store logs for analysis.",
+        "testStrategy": "Test logging and monitoring by running the scraper and verifying log output.",
+        "priority": "medium",
+        "dependencies": [
+          7,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Build Configuration UI and Export Customization",
+        "description": "Enable user customization of search queries, proxy settings, and export formats.",
+        "details": "Extend YAML config to support custom queries and export options. Provide CLI or simple UI for configuration.",
+        "testStrategy": "Test configuration changes and export format customization.",
+        "priority": "low",
+        "dependencies": [
+          2,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Implement Comprehensive Test Suite",
+        "description": "Develop unit and integration tests for all core modules.",
+        "details": "Use pytest (7.4.0) for testing. Cover search, extraction, email, anti-detection, error handling, and data storage. Mock external dependencies.",
+        "testStrategy": "Run test suite and verify coverage for all critical paths.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "Document Code and Usage",
+        "description": "Write comprehensive documentation for code, configuration, and usage.",
+        "details": "Generate API docs with Sphinx or MkDocs. Write user guides for configuration and operation. Include examples and troubleshooting.",
+        "testStrategy": "Review documentation for clarity and completeness.",
+        "priority": "low",
+        "dependencies": [
+          11,
+          12
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "Optimize Performance and Resource Usage",
+        "description": "Profile and optimize memory, CPU, and network usage.",
+        "details": "Use profiling tools (cProfile, memory_profiler) to identify bottlenecks. Optimize data structures, request batching, and caching.",
+        "testStrategy": "Profile before and after optimizations and compare metrics.",
+        "priority": "medium",
+        "dependencies": [
+          8,
+          10
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "Prepare for Deployment and Maintenance",
+        "description": "Set up CI/CD, monitoring, and maintenance procedures.",
+        "details": "Configure GitHub Actions or similar for CI/CD. Set up monitoring dashboards and alerting. Plan for dependency updates and maintenance.",
+        "testStrategy": "Test deployment pipeline and monitor system health.",
+        "priority": "low",
+        "dependencies": [
+          13,
+          14
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-04T22:10:03.834Z",
+      "updated": "2025-07-04T22:10:03.834Z",
+      "description": "Tasks for optimization context"
+    }
+  },
+  "optimization": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Project Structure and Dependencies",
+        "description": "Initialize the project repository with the required directory structure and install all necessary dependencies.",
+        "details": "Create a new Python project with the following structure:\n- src/\n  - scraper/\n    - __init__.py\n    - main.py\n    - extractors/\n    - navigation/\n    - utils/\n    - export/\n- config/\n  - settings.yaml\n- tests/\n- docs/\n\nInstall required dependencies:\n```bash\npip install selenium beautifulsoup4 requests pyyaml pytest mypy black\n```\n\nCreate a requirements.txt file with pinned versions.\nSetup a virtual environment for development isolation.",
+        "testStrategy": "Verify that all dependencies install correctly and the project structure is created as specified. Run a simple import test to ensure all packages are accessible.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Implement Configuration Management",
+        "description": "Create a YAML-based configuration system for managing scraper settings and search parameters.",
+        "details": "Create a configuration module that:\n1. Loads settings from YAML files in the config/ directory\n2. Provides default values for all settings\n3. Validates configuration values\n4. Exposes a clean API for accessing settings\n\nExample YAML structure:\n```yaml\nsearch:\n  keywords: \"Hausverwaltung\"\n  locations: [\"Berlin\", \"Hamburg\"]\n  results_per_page: 20\n\nscraper:\n  delay_min: 2\n  delay_max: 5\n  max_retries: 3\n  timeout: 30\n\nproxies:\n  enabled: true\n  providers: [\"provider1\", \"provider2\"]\n\nuser_agents:\n  - \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...\"\n  - \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)...\"\n```\n\nImplement a ConfigManager class with methods for loading, validating, and accessing configuration.",
+        "testStrategy": "Write unit tests to verify:\n1. Loading valid YAML files\n2. Handling missing or invalid configuration files\n3. Providing default values\n4. Configuration validation\n5. Accessing nested configuration values",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Develop Logging and Error Handling System",
+        "description": "Implement comprehensive logging and error handling mechanisms to track scraper operation and manage failures.",
+        "details": "Create a logging module that:\n1. Uses Python's built-in logging module\n2. Configures different log levels (DEBUG, INFO, WARNING, ERROR)\n3. Logs to both console and file\n4. Includes timestamps, log levels, and source information\n5. Rotates log files based on size\n\nImplement error handling utilities:\n1. Custom exception classes for different error types\n2. Error recovery strategies\n3. Retry mechanisms with exponential backoff\n4. Context managers for resource cleanup\n\nExample implementation:\n```python\nimport logging\nfrom logging.handlers import RotatingFileHandler\nimport os\n\ndef setup_logging(log_dir=\"logs\", log_level=logging.INFO):\n    if not os.path.exists(log_dir):\n        os.makedirs(log_dir)\n        \n    logger = logging.getLogger(\"scraper\")\n    logger.setLevel(log_level)\n    \n    # Console handler\n    console_handler = logging.StreamHandler()\n    console_handler.setLevel(log_level)\n    \n    # File handler\n    file_handler = RotatingFileHandler(\n        os.path.join(log_dir, \"scraper.log\"),\n        maxBytes=10*1024*1024,  # 10MB\n        backupCount=5\n    )\n    file_handler.setLevel(log_level)\n    \n    # Formatter\n    formatter = logging.Formatter(\n        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'\n    )\n    console_handler.setFormatter(formatter)\n    file_handler.setFormatter(formatter)\n    \n    # Add handlers\n    logger.addHandler(console_handler)\n    logger.addHandler(file_handler)\n    \n    return logger\n```",
+        "testStrategy": "Test the logging system by:\n1. Verifying log file creation and rotation\n2. Checking that messages at different log levels are properly recorded\n3. Testing error handling and recovery mechanisms\n4. Simulating various error conditions to ensure proper handling",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Implement Browser Automation Setup",
+        "description": "Set up Selenium WebDriver with configurable browser profiles, headless operation, and session management.",
+        "details": "Create a browser automation module that:\n1. Initializes Selenium WebDriver with appropriate options\n2. Supports headless operation\n3. Configures custom browser profiles\n4. Manages cookies and sessions\n5. Handles browser cleanup\n\nImplementation details:\n```python\nfrom selenium import webdriver\nfrom selenium.webdriver.chrome.options import Options\nfrom selenium.webdriver.chrome.service import Service\nfrom webdriver_manager.chrome import ChromeDriverManager\nimport random\nfrom typing import Optional, Dict, List\n\nclass BrowserManager:\n    def __init__(self, config: Dict):\n        self.config = config\n        self.driver = None\n        \n    def get_user_agent(self) -> str:\n        \"\"\"Randomly select a user agent from the configured list\"\"\"\n        user_agents = self.config.get('user_agents', [])\n        if not user_agents:\n            return \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36\"\n        return random.choice(user_agents)\n        \n    def create_driver(self, headless: bool = True) -> webdriver.Chrome:\n        \"\"\"Create and configure a new Chrome WebDriver instance\"\"\"\n        options = Options()\n        \n        if headless:\n            options.add_argument('--headless')\n            \n        options.add_argument('--no-sandbox')\n        options.add_argument('--disable-dev-shm-usage')\n        options.add_argument(f'user-agent={self.get_user_agent()}')\n        \n        # Add additional privacy/fingerprinting protections\n        options.add_argument('--disable-blink-features=AutomationControlled')\n        options.add_experimental_option(\"excludeSwitches\", [\"enable-automation\"])\n        options.add_experimental_option('useAutomationExtension', False)\n        \n        # Create the driver\n        service = Service(ChromeDriverManager().install())\n        driver = webdriver.Chrome(service=service, options=options)\n        \n        # Set window size\n        driver.set_window_size(1920, 1080)\n        \n        # Execute stealth JS script to avoid detection\n        driver.execute_cdp_cmd('Network.setUserAgentOverride', {\n            \"userAgent\": self.get_user_agent()\n        })\n        \n        return driver\n        \n    def get_driver(self) -> webdriver.Chrome:\n        \"\"\"Get or create a WebDriver instance\"\"\"\n        if self.driver is None:\n            self.driver = self.create_driver(\n                headless=self.config.get('headless', True)\n            )\n        return self.driver\n        \n    def close(self) -> None:\n        \"\"\"Close the WebDriver instance and clean up resources\"\"\"\n        if self.driver:\n            self.driver.quit()\n            self.driver = None\n```",
+        "testStrategy": "Test the browser automation setup by:\n1. Verifying WebDriver initialization with different configurations\n2. Testing headless vs. non-headless operation\n3. Checking user agent rotation\n4. Validating cookie and session management\n5. Ensuring proper resource cleanup",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Implement Anti-Detection Measures",
+        "description": "Develop comprehensive anti-detection mechanisms including IP rotation, user agent rotation, and request timing strategies.",
+        "details": "Create an anti-detection module that:\n1. Manages proxy rotation for IP address changes\n2. Rotates user agents and browser fingerprints\n3. Implements random delays between requests\n4. Monitors for blocking patterns\n5. Manages session cookies and headers\n\nImplementation details:\n```python\nimport random\nimport time\nfrom typing import Dict, List, Optional\nimport requests\n\nclass AntiDetectionManager:\n    def __init__(self, config: Dict):\n        self.config = config\n        self.proxies = self._load_proxies()\n        self.user_agents = config.get('user_agents', [])\n        self.current_proxy_index = 0\n        self.blocked_proxies = set()\n        \n    def _load_proxies(self) -> List[Dict[str, str]]:\n        \"\"\"Load proxy configurations from settings\"\"\"\n        if not self.config.get('proxies', {}).get('enabled', False):\n            return []\n            \n        # Implementation would depend on proxy source\n        # This is a placeholder for actual proxy loading logic\n        proxy_list = []\n        # Add proxy loading logic here\n        return proxy_list\n        \n    def get_next_proxy(self) -> Optional[Dict[str, str]]:\n        \"\"\"Get the next available proxy from the rotation\"\"\"\n        if not self.proxies:\n            return None\n            \n        attempts = 0\n        while attempts < len(self.proxies):\n            self.current_proxy_index = (self.current_proxy_index + 1) % len(self.proxies)\n            proxy = self.proxies[self.current_proxy_index]\n            \n            if proxy not in self.blocked_proxies:\n                return proxy\n                \n            attempts += 1\n            \n        return None\n        \n    def get_random_user_agent(self) -> str:\n        \"\"\"Get a random user agent from the configured list\"\"\"\n        if not self.user_agents:\n            return \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36\"\n        return random.choice(self.user_agents)\n        \n    def random_delay(self) -> None:\n        \"\"\"Implement a random delay between requests\"\"\"\n        min_delay = self.config.get('delay_min', 2)\n        max_delay = self.config.get('delay_max', 5)\n        delay = random.uniform(min_delay, max_delay)\n        time.sleep(delay)\n        \n    def detect_blocking(self, response_text: str) -> bool:\n        \"\"\"Check if the response indicates we've been blocked\"\"\"\n        blocking_patterns = [\n            \"captcha\",\n            \"automated access\",\n            \"blocked\",\n            \"too many requests\",\n            \"access denied\"\n        ]\n        \n        response_lower = response_text.lower()\n        for pattern in blocking_patterns:\n            if pattern in response_lower:\n                return True\n                \n        return False\n        \n    def mark_proxy_blocked(self, proxy: Dict[str, str]) -> None:\n        \"\"\"Mark a proxy as blocked\"\"\"\n        if proxy:\n            self.blocked_proxies.add(proxy)\n```",
+        "testStrategy": "Test the anti-detection measures by:\n1. Verifying proxy rotation functionality\n2. Testing user agent rotation\n3. Measuring request timing and delays\n4. Simulating blocking scenarios to test detection\n5. Validating the system's response to being blocked",
+        "priority": "high",
+        "dependencies": [
+          2,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Implement Search Results Navigation",
+        "description": "Develop functionality to navigate through 11880.com search results, including pagination and search parameter handling.",
+        "details": "Create a navigation module that:\n1. Constructs search URLs based on configuration\n2. Navigates to search results pages\n3. Handles pagination across multiple result pages\n4. Detects end of results\n\nImplementation details:\n```python\nfrom selenium import webdriver\nfrom selenium.webdriver.common.by import By\nfrom selenium.webdriver.support.ui import WebDriverWait\nfrom selenium.webdriver.support import expected_conditions as EC\nfrom typing import Dict, List, Generator\nimport logging\n\nlogger = logging.getLogger(\"scraper.navigation\")\n\nclass SearchNavigator:\n    def __init__(self, driver: webdriver.Chrome, config: Dict, anti_detection_manager):\n        self.driver = driver\n        self.config = config\n        self.anti_detection = anti_detection_manager\n        self.base_url = \"https://www.11880.com/suche\"\n        \n    def build_search_url(self, keyword: str, location: str, page: int = 1) -> str:\n        \"\"\"Build a search URL for 11880.com\"\"\"\n        # Format: https://www.11880.com/suche/keyword/location?page=X\n        return f\"{self.base_url}/{keyword}/{location}?page={page}\"\n        \n    def navigate_to_search_page(self, keyword: str, location: str, page: int = 1) -> bool:\n        \"\"\"Navigate to a specific search results page\"\"\"\n        url = self.build_search_url(keyword, location, page)\n        logger.info(f\"Navigating to: {url}\")\n        \n        try:\n            self.driver.get(url)\n            self.anti_detection.random_delay()\n            \n            # Check for blocking\n            if self.anti_detection.detect_blocking(self.driver.page_source):\n                logger.warning(\"Detected blocking on search page\")\n                return False\n                \n            # Wait for results to load\n            WebDriverWait(self.driver, 10).until(\n                EC.presence_of_element_located((By.CSS_SELECTOR, \".entry\"))\n            )\n            \n            return True\n        except Exception as e:\n            logger.error(f\"Error navigating to search page: {e}\")\n            return False\n            \n    def get_total_pages(self) -> int:\n        \"\"\"Extract the total number of result pages\"\"\"\n        try:\n            # This selector would need to be adjusted based on the actual site structure\n            pagination = self.driver.find_elements(By.CSS_SELECTOR, \".pagination .page-item\")\n            if not pagination:\n                return 1\n                \n            # Get the second-to-last element (last is usually 'next' button)\n            if len(pagination) >= 2:\n                last_page_text = pagination[-2].text.strip()\n                if last_page_text.isdigit():\n                    return int(last_page_text)\n            \n            return 1\n        except Exception as e:\n            logger.error(f\"Error getting total pages: {e}\")\n            return 1\n            \n    def iterate_search_results(self, keyword: str, location: str) -> Generator[List[Dict], None, None]:\n        \"\"\"Iterate through all search result pages for a keyword and location\"\"\"\n        page = 1\n        more_pages = True\n        \n        while more_pages:\n            success = self.navigate_to_search_page(keyword, location, page)\n            if not success:\n                logger.warning(f\"Failed to navigate to page {page}, stopping pagination\")\n                break\n                \n            # Extract results from current page (this will be implemented in another task)\n            results = []  # This will be replaced with actual extraction logic\n            \n            yield results\n            \n            # Check if there are more pages\n            total_pages = self.get_total_pages()\n            more_pages = page < total_pages\n            page += 1\n```",
+        "testStrategy": "Test the search results navigation by:\n1. Verifying URL construction for different search parameters\n2. Testing navigation to search results pages\n3. Validating pagination detection and handling\n4. Checking for proper handling of end-of-results conditions\n5. Testing error handling during navigation",
+        "priority": "high",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Implement Company Data Extraction",
+        "description": "Develop functionality to extract company information from 11880.com search results.",
+        "details": "Create a data extraction module that:\n1. Parses HTML from search results pages\n2. Extracts company information (name, address, phone, website)\n3. Structures the data in a consistent format\n4. Handles missing or incomplete information\n\nImplementation details:\n```python\nfrom selenium import webdriver\nfrom selenium.webdriver.common.by import By\nfrom bs4 import BeautifulSoup\nfrom typing import Dict, List, Optional\nimport logging\nimport re\n\nlogger = logging.getLogger(\"scraper.extractors\")\n\nclass CompanyDataExtractor:\n    def __init__(self, driver: webdriver.Chrome):\n        self.driver = driver\n        \n    def extract_companies_from_page(self) -> List[Dict]:\n        \"\"\"Extract all company listings from the current search results page\"\"\"\n        companies = []\n        \n        try:\n            # Wait for the page to load completely\n            soup = BeautifulSoup(self.driver.page_source, 'html.parser')\n            \n            # Find all company entries (adjust selector based on actual site structure)\n            company_elements = soup.select('.entry')\n            \n            for element in company_elements:\n                company_data = self._extract_company_data(element)\n                if company_data:\n                    companies.append(company_data)\n                    \n            logger.info(f\"Extracted {len(companies)} companies from page\")\n            return companies\n        except Exception as e:\n            logger.error(f\"Error extracting companies from page: {e}\")\n            return []\n            \n    def _extract_company_data(self, element) -> Optional[Dict]:\n        \"\"\"Extract data for a single company from its HTML element\"\"\"\n        try:\n            # These selectors would need to be adjusted based on the actual site structure\n            name_element = element.select_one('.company-name')\n            address_element = element.select_one('.address')\n            phone_element = element.select_one('.phone')\n            website_element = element.select_one('.website a')\n            \n            if not name_element:\n                return None\n                \n            company = {\n                'name': name_element.text.strip() if name_element else '',\n                'address': self._parse_address(address_element.text.strip()) if address_element else {},\n                'phone': phone_element.text.strip() if phone_element else '',\n                'website': website_element['href'] if website_element and 'href' in website_element.attrs else None,\n                'email': None,  # Will be filled in by email extraction task\n                'source_url': self.driver.current_url\n            }\n            \n            return company\n        except Exception as e:\n            logger.error(f\"Error extracting company data: {e}\")\n            return None\n            \n    def _parse_address(self, address_text: str) -> Dict:\n        \"\"\"Parse a raw address string into structured components\"\"\"\n        # This is a simplified implementation and would need to be adapted\n        # to the actual address format on the site\n        address_parts = address_text.split(',')\n        \n        address = {}\n        if len(address_parts) >= 1:\n            address['street'] = address_parts[0].strip()\n            \n        if len(address_parts) >= 2:\n            # Try to extract postal code and city\n            location_match = re.match(r'\\s*([0-9]{5})\\s+(.+)', address_parts[1].strip())\n            if location_match:\n                address['postal_code'] = location_match.group(1)\n                address['city'] = location_match.group(2)\n            else:\n                address['city'] = address_parts[1].strip()\n                \n        return address\n```",
+        "testStrategy": "Test the company data extraction by:\n1. Verifying extraction from sample HTML pages\n2. Testing handling of different data formats and structures\n3. Validating address parsing functionality\n4. Checking handling of missing or incomplete information\n5. Testing extraction from actual search results pages",
+        "priority": "high",
+        "dependencies": [
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Implement Email Extraction from Company Websites",
+        "description": "Develop functionality to extract email addresses from company websites by following links from 11880.com results.",
+        "details": "Create an email extraction module that:\n1. Navigates to company websites\n2. Extracts email addresses from HTML content\n3. Handles different email formats and patterns\n4. Explores multiple pages within company websites\n5. Validates extracted email addresses\n\nImplementation details:\n```python\nfrom selenium import webdriver\nfrom selenium.webdriver.common.by import By\nfrom bs4 import BeautifulSoup\nfrom typing import Dict, List, Set, Optional\nimport logging\nimport re\nimport time\nimport random\n\nlogger = logging.getLogger(\"scraper.email_extractor\")\n\nclass EmailExtractor:\n    def __init__(self, driver: webdriver.Chrome, config: Dict, anti_detection_manager):\n        self.driver = driver\n        self.config = config\n        self.anti_detection = anti_detection_manager\n        self.max_pages_per_site = config.get('max_pages_per_site', 5)\n        self.email_pattern = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}')\n        \n    def extract_emails_from_company(self, company: Dict) -> List[str]:\n        \"\"\"Extract email addresses from a company website\"\"\"\n        if not company.get('website'):\n            logger.info(f\"No website available for company: {company.get('name')}\")\n            return []\n            \n        website_url = company['website']\n        logger.info(f\"Extracting emails from: {website_url}\")\n        \n        try:\n            # Navigate to the company website\n            self.driver.get(website_url)\n            self.anti_detection.random_delay()\n            \n            # Check for blocking\n            if self.anti_detection.detect_blocking(self.driver.page_source):\n                logger.warning(f\"Detected blocking on website: {website_url}\")\n                return []\n                \n            # Extract emails from the main page\n            emails = set(self._extract_emails_from_page(self.driver.page_source))\n            \n            # If no emails found, try to find contact page\n            if not emails:\n                contact_links = self._find_contact_links()\n                for link in contact_links[:2]:  # Limit to first 2 contact links\n                    try:\n                        self.driver.get(link)\n                        self.anti_detection.random_delay()\n                        page_emails = self._extract_emails_from_page(self.driver.page_source)\n                        emails.update(page_emails)\n                    except Exception as e:\n                        logger.error(f\"Error accessing contact page {link}: {e}\")\n            \n            # Validate emails\n            valid_emails = [email for email in emails if self._validate_email(email)]\n            \n            return valid_emails\n        except Exception as e:\n            logger.error(f\"Error extracting emails from {website_url}: {e}\")\n            return []\n            \n    def _extract_emails_from_page(self, html_content: str) -> List[str]:\n        \"\"\"Extract email addresses from HTML content\"\"\"\n        # Look for emails in the HTML\n        emails = self.email_pattern.findall(html_content)\n        \n        # Also look for obfuscated emails (common techniques)\n        soup = BeautifulSoup(html_content, 'html.parser')\n        \n        # Check for emails in data attributes\n        elements_with_data = soup.select('[data-email]')\n        for element in elements_with_data:\n            if 'data-email' in element.attrs:\n                emails.append(element['data-email'])\n                \n        # Check for emails in JavaScript\n        scripts = soup.find_all('script')\n        for script in scripts:\n            if script.string:\n                script_emails = self.email_pattern.findall(script.string)\n                emails.extend(script_emails)\n                \n        return list(set(emails))\n        \n    def _find_contact_links(self) -> List[str]:\n        \"\"\"Find links to contact pages on the website\"\"\"\n        contact_links = []\n        \n        try:\n            # Look for common contact page links\n            contact_keywords = ['contact', 'kontakt', 'impressum', 'about', 'über uns']\n            \n            links = self.driver.find_elements(By.TAG_NAME, 'a')\n            base_url = self.driver.current_url\n            \n            for link in links:\n                try:\n                    href = link.get_attribute('href')\n                    text = link.text.lower()\n                    \n                    if not href or not href.startswith('http'):\n                        continue\n                        \n                    # Check if the link text contains contact keywords\n                    if any(keyword in text for keyword in contact_keywords):\n                        contact_links.append(href)\n                except Exception:\n                    continue\n                    \n            return contact_links\n        except Exception as e:\n            logger.error(f\"Error finding contact links: {e}\")\n            return []\n            \n    def _validate_email(self, email: str) -> bool:\n        \"\"\"Validate an email address format\"\"\"\n        # Basic validation - could be expanded with more sophisticated checks\n        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$', email):\n            return False\n            \n        # Check for common invalid patterns\n        invalid_patterns = [\n            r'@example\\.com$',\n            r'@test\\.com$',\n            r'^noreply@',\n            r'^info@example\\.com$'\n        ]\n        \n        for pattern in invalid_patterns:\n            if re.search(pattern, email, re.IGNORECASE):\n                return False\n                \n        return True\n```",
+        "testStrategy": "Test the email extraction by:\n1. Verifying extraction from sample company websites\n2. Testing handling of different email formats and obfuscation techniques\n3. Validating email address format checking\n4. Testing navigation to contact pages\n5. Checking handling of websites without emails\n6. Measuring extraction success rate across a sample of websites",
+        "priority": "high",
+        "dependencies": [
+          5,
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Data Validation and Cleaning",
+        "description": "Develop functionality to validate and clean extracted company data and email addresses.",
+        "details": "Create a data validation module that:\n1. Verifies the completeness of company information\n2. Validates extracted email addresses\n3. Removes duplicates and invalid entries\n4. Standardizes data formats\n\nImplementation details:\n```python\nfrom typing import Dict, List, Set, Any\nimport re\nimport logging\n\nlogger = logging.getLogger(\"scraper.validation\")\n\nclass DataValidator:\n    def __init__(self, config: Dict):\n        self.config = config\n        self.email_pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')\n        \n    def validate_company(self, company: Dict) -> Dict:\n        \"\"\"Validate and clean company data\"\"\"\n        # Create a copy to avoid modifying the original\n        validated = company.copy()\n        \n        # Validate and clean name\n        if 'name' in validated:\n            validated['name'] = self._clean_text(validated['name'])\n            if not validated['name']:\n                logger.warning(\"Company with empty name detected\")\n                validated['name'] = \"Unknown Company\"\n                \n        # Validate and clean address\n        if 'address' in validated and isinstance(validated['address'], dict):\n            for key, value in validated['address'].items():\n                if isinstance(value, str):\n                    validated['address'][key] = self._clean_text(value)\n                    \n        # Validate and clean phone\n        if 'phone' in validated:\n            validated['phone'] = self._clean_phone(validated.get('phone', ''))\n            \n        # Validate website\n        if 'website' in validated and validated['website']:\n            validated['website'] = self._clean_url(validated['website'])\n            \n        # Validate emails\n        if 'emails' in validated and validated['emails']:\n            validated['emails'] = self._validate_emails(validated['emails'])\n            \n        return validated\n        \n    def validate_dataset(self, companies: List[Dict]) -> List[Dict]:\n        \"\"\"Validate and clean a dataset of companies\"\"\"\n        # Validate individual companies\n        validated_companies = [self.validate_company(company) for company in companies]\n        \n        # Remove duplicates\n        deduplicated = self._remove_duplicates(validated_companies)\n        \n        # Remove companies without sufficient information\n        filtered = self._filter_incomplete(deduplicated)\n        \n        logger.info(f\"Validated {len(companies)} companies, {len(filtered)} passed validation\")\n        \n        return filtered\n        \n    def _clean_text(self, text: str) -> str:\n        \"\"\"Clean and normalize text fields\"\"\"\n        if not text:\n            return \"\"\n            \n        # Remove extra whitespace\n        cleaned = re.sub(r'\\s+', ' ', text).strip()\n        \n        # Remove special characters that might cause issues\n        cleaned = re.sub(r'[\\\\\\\\^\\\\*\\\\[\\\\]\\\\{\\\\}\\\\<\\\\>\\\\~\\\\|]', '', cleaned)\n        \n        return cleaned\n        \n    def _clean_phone(self, phone: str) -> str:\n        \"\"\"Clean and normalize phone numbers\"\"\"\n        if not phone:\n            return \"\"\n            \n        # Remove non-digit characters except + for international prefix\n        digits_only = re.sub(r'[^0-9+]', '', phone)\n        \n        # Ensure proper format for German numbers\n        if digits_only.startswith('0') and not digits_only.startswith('00'):\n            # Convert 0... to +49...\n            digits_only = '+49' + digits_only[1:]\n        elif digits_only.startswith('00'):\n            # Convert 00... to +...\n            digits_only = '+' + digits_only[2:]\n            \n        return digits_only\n        \n    def _clean_url(self, url: str) -> str:\n        \"\"\"Clean and normalize URLs\"\"\"\n        if not url:\n            return \"\"\n            \n        # Ensure URL has a scheme\n        if not url.startswith(('http://', 'https://')):\n            url = 'http://' + url\n            \n        # Remove trailing slashes\n        url = url.rstrip('/')\n        \n        return url\n        \n    def _validate_emails(self, emails: List[str]) -> List[str]:\n        \"\"\"Validate a list of email addresses\"\"\"\n        valid_emails = []\n        \n        for email in emails:\n            # Basic format validation\n            if not self.email_pattern.match(email):\n                continue\n                \n            # Check for common invalid patterns\n            invalid_patterns = [\n                r'@example\\.com$',\n                r'@test\\.com$',\n                r'^noreply@',\n                r'^info@example\\.com$'\n            ]\n            \n            is_valid = True\n            for pattern in invalid_patterns:\n                if re.search(pattern, email, re.IGNORECASE):\n                    is_valid = False\n                    break\n                    \n            if is_valid:\n                valid_emails.append(email.lower())  # Normalize to lowercase\n                \n        return valid_emails\n        \n    def _remove_duplicates(self, companies: List[Dict]) -> List[Dict]:\n        \"\"\"Remove duplicate companies from the dataset\"\"\"\n        unique_companies = {}\n        \n        for company in companies:\n            # Create a key based on name and address\n            name = company.get('name', '').lower()\n            address = str(company.get('address', {})).lower()\n            key = f\"{name}|{address}\"\n            \n            if key not in unique_companies:\n                unique_companies[key] = company\n            else:\n                # If duplicate found, merge emails\n                existing = unique_companies[key]\n                existing_emails = set(existing.get('emails', []))\n                new_emails = set(company.get('emails', []))\n                \n                all_emails = existing_emails.union(new_emails)\n                unique_companies[key]['emails'] = list(all_emails)\n                \n        return list(unique_companies.values())\n        \n    def _filter_incomplete(self, companies: List[Dict]) -> List[Dict]:\n        \"\"\"Filter out companies with insufficient information\"\"\"\n        complete_companies = []\n        \n        for company in companies:\n            # Define minimum requirements for a valid company entry\n            has_name = bool(company.get('name'))\n            has_address = bool(company.get('address'))\n            has_contact = bool(company.get('phone')) or bool(company.get('emails'))\n            \n            if has_name and (has_address or has_contact):\n                complete_companies.append(company)\n                \n        return complete_companies\n```",
+        "testStrategy": "Test the data validation and cleaning by:\n1. Verifying handling of various data formats and edge cases\n2. Testing email validation with valid and invalid examples\n3. Checking duplicate detection and removal\n4. Validating phone number normalization\n5. Testing URL cleaning and normalization\n6. Measuring overall data quality improvements",
+        "priority": "medium",
+        "dependencies": [
+          7,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Implement CSV Export Functionality",
+        "description": "Develop functionality to export scraped company data to CSV format with all relevant details.",
+        "details": "Create an export module that:\n1. Formats company data for CSV export\n2. Handles special characters and encoding\n3. Supports incremental exports\n4. Includes all relevant company details\n\nImplementation details:\n```python\nimport csv\nimport os\nfrom typing import Dict, List, Any\nimport logging\nfrom datetime import datetime\n\nlogger = logging.getLogger(\"scraper.export\")\n\nclass CSVExporter:\n    def __init__(self, config: Dict):\n        self.config = config\n        self.export_dir = config.get('export_dir', 'exports')\n        \n        # Create export directory if it doesn't exist\n        if not os.path.exists(self.export_dir):\n            os.makedirs(self.export_dir)\n            \n    def export_companies(self, companies: List[Dict], filename: str = None) -> str:\n        \"\"\"Export companies to a CSV file\"\"\"\n        if not filename:\n            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')\n            filename = f\"companies_{timestamp}.csv\"\n            \n        filepath = os.path.join(self.export_dir, filename)\n        \n        # Define CSV headers\n        headers = [\n            'Name',\n            'Street',\n            'Postal Code',\n            'City',\n            'Phone',\n            'Website',\n            'Email',\n            'Source URL'\n        ]\n        \n        try:\n            with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:\n                writer = csv.DictWriter(csvfile, fieldnames=headers)\n                writer.writeheader()\n                \n                for company in companies:\n                    # Prepare row data\n                    row = {\n                        'Name': company.get('name', ''),\n                        'Street': company.get('address', {}).get('street', ''),\n                        'Postal Code': company.get('address', {}).get('postal_code', ''),\n                        'City': company.get('address', {}).get('city', ''),\n                        'Phone': company.get('phone', ''),\n                        'Website': company.get('website', ''),\n                        'Email': '; '.join(company.get('emails', [])),\n                        'Source URL': company.get('source_url', '')\n                    }\n                    \n                    writer.writerow(row)\n                    \n            logger.info(f\"Exported {len(companies)} companies to {filepath}\")\n            return filepath\n        except Exception as e:\n            logger.error(f\"Error exporting companies to CSV: {e}\")\n            return \"\"\n            \n    def append_to_export(self, companies: List[Dict], filepath: str) -> bool:\n        \"\"\"Append companies to an existing CSV file\"\"\"\n        if not os.path.exists(filepath):\n            logger.error(f\"Export file does not exist: {filepath}\")\n            return False\n            \n        # Read existing data to avoid duplicates\n        existing_companies = set()\n        try:\n            with open(filepath, 'r', encoding='utf-8') as csvfile:\n                reader = csv.DictReader(csvfile)\n                for row in reader:\n                    # Create a unique key for each company\n                    key = f\"{row['Name']}|{row['Street']}|{row['City']}\"\n                    existing_companies.add(key)\n        except Exception as e:\n            logger.error(f\"Error reading existing export file: {e}\")\n            return False\n            \n        # Append new companies\n        try:\n            with open(filepath, 'a', newline='', encoding='utf-8') as csvfile:\n                # Get headers from the first row\n                with open(filepath, 'r', encoding='utf-8') as readfile:\n                    reader = csv.reader(readfile)\n                    headers = next(reader)\n                    \n                writer = csv.DictWriter(csvfile, fieldnames=headers)\n                \n                new_count = 0\n                for company in companies:\n                    # Create key for deduplication\n                    key = f\"{company.get('name', '')}|{company.get('address', {}).get('street', '')}|{company.get('address', {}).get('city', '')}\"\n                    \n                    if key not in existing_companies:\n                        # Prepare row data\n                        row = {\n                            'Name': company.get('name', ''),\n                            'Street': company.get('address', {}).get('street', ''),\n                            'Postal Code': company.get('address', {}).get('postal_code', ''),\n                            'City': company.get('address', {}).get('city', ''),\n                            'Phone': company.get('phone', ''),\n                            'Website': company.get('website', ''),\n                            'Email': '; '.join(company.get('emails', [])),\n                            'Source URL': company.get('source_url', '')\n                        }\n                        \n                        writer.writerow(row)\n                        new_count += 1\n                        existing_companies.add(key)\n                        \n            logger.info(f\"Appended {new_count} new companies to {filepath}\")\n            return True\n        except Exception as e:\n            logger.error(f\"Error appending to export file: {e}\")\n            return False\n```",
+        "testStrategy": "Test the CSV export functionality by:\n1. Verifying correct formatting of company data in CSV files\n2. Testing handling of special characters and encoding\n3. Validating incremental export functionality\n4. Checking for proper handling of duplicate entries\n5. Testing with various data sets and file sizes",
+        "priority": "medium",
+        "dependencies": [
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Implement Main Scraper Orchestration",
+        "description": "Develop the main scraper module to orchestrate the entire scraping process, from configuration to export.",
+        "details": "Create a main scraper module that:\n1. Initializes all components\n2. Coordinates the scraping workflow\n3. Handles errors and recovery\n4. Tracks progress and performance\n\nImplementation details:\n```python\nimport logging\nfrom typing import Dict, List, Any\nimport time\nfrom datetime import datetime\n\n# Import all the components\nfrom scraper.config import ConfigManager\nfrom scraper.browser import BrowserManager\nfrom scraper.anti_detection import AntiDetectionManager\nfrom scraper.navigation import SearchNavigator\nfrom scraper.extractors import CompanyDataExtractor\nfrom scraper.email_extractor import EmailExtractor\nfrom scraper.validation import DataValidator\nfrom scraper.export import CSVExporter\n\nlogger = logging.getLogger(\"scraper.main\")\n\nclass Scraper:\n    def __init__(self, config_path: str):\n        # Initialize configuration\n        self.config_manager = ConfigManager(config_path)\n        self.config = self.config_manager.get_config()\n        \n        # Setup logging\n        log_level = getattr(logging, self.config.get('log_level', 'INFO'))\n        logging.basicConfig(\n            level=log_level,\n            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',\n            handlers=[\n                logging.FileHandler(f\"scraper_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log\"),\n                logging.StreamHandler()\n            ]\n        )\n        \n        # Initialize components\n        self.browser_manager = BrowserManager(self.config)\n        self.anti_detection = AntiDetectionManager(self.config)\n        self.driver = None\n        self.navigator = None\n        self.company_extractor = None\n        self.email_extractor = None\n        self.validator = DataValidator(self.config)\n        self.exporter = CSVExporter(self.config)\n        \n        # Statistics\n        self.stats = {\n            'companies_found': 0,\n            'emails_found': 0,\n            'pages_processed': 0,\n            'errors': 0,\n            'start_time': None,\n            'end_time': None\n        }\n        \n    def initialize(self):\n        \"\"\"Initialize all components\"\"\"\n        try:\n            logger.info(\"Initializing scraper components\")\n            self.driver = self.browser_manager.get_driver()\n            self.navigator = SearchNavigator(self.driver, self.config, self.anti_detection)\n            self.company_extractor = CompanyDataExtractor(self.driver)\n            self.email_extractor = EmailExtractor(self.driver, self.config, self.anti_detection)\n            logger.info(\"Scraper components initialized successfully\")\n            return True\n        except Exception as e:\n            logger.error(f\"Error initializing scraper: {e}\")\n            return False\n            \n    def run(self):\n        \"\"\"Run the complete scraping process\"\"\"\n        self.stats['start_time'] = datetime.now()\n        \n        if not self.initialize():\n            logger.error(\"Failed to initialize scraper, aborting\")\n            return False\n            \n        try:\n            # Get search parameters\n            keywords = self.config.get('search', {}).get('keywords', [])\n            locations = self.config.get('search', {}).get('locations', [])\n            \n            if not isinstance(keywords, list):\n                keywords = [keywords]\n                \n            if not isinstance(locations, list):\n                locations = [locations]\n                \n            all_companies = []\n            \n            # Process each keyword and location combination\n            for keyword in keywords:\n                for location in locations:\n                    logger.info(f\"Processing search: {keyword} in {location}\")\n                    companies = self._process_search(keyword, location)\n                    all_companies.extend(companies)\n                    \n            # Validate and export results\n            validated_companies = self.validator.validate_dataset(all_companies)\n            self.exporter.export_companies(validated_companies)\n            \n            self.stats['end_time'] = datetime.now()\n            self._log_statistics()\n            \n            return True\n        except Exception as e:\n            logger.error(f\"Error during scraping process: {e}\")\n            self.stats['errors'] += 1\n            self.stats['end_time'] = datetime.now()\n            self._log_statistics()\n            return False\n        finally:\n            # Clean up resources\n            self._cleanup()\n            \n    def _process_search(self, keyword: str, location: str) -> List[Dict]:\n        \"\"\"Process a single search (keyword + location)\"\"\"\n        companies = []\n        \n        try:\n            # Iterate through search result pages\n            for page_results in self.navigator.iterate_search_results(keyword, location):\n                self.stats['pages_processed'] += 1\n                \n                # Extract companies from the current page\n                page_companies = self.company_extractor.extract_companies_from_page()\n                \n                # Extract emails for each company\n                for company in page_companies:\n                    try:\n                        emails = self.email_extractor.extract_emails_from_company(company)\n                        company['emails'] = emails\n                        self.stats['emails_found'] += len(emails)\n                    except Exception as e:\n                        logger.error(f\"Error extracting emails for {company.get('name')}: {e}\")\n                        company['emails'] = []\n                        self.stats['errors'] += 1\n                        \n                companies.extend(page_companies)\n                self.stats['companies_found'] += len(page_companies)\n                \n                # Periodically save progress\n                if len(companies) % 50 == 0:\n                    logger.info(f\"Progress: {len(companies)} companies processed\")\n                    \n        except Exception as e:\n            logger.error(f\"Error processing search {keyword} in {location}: {e}\")\n            self.stats['errors'] += 1\n            \n        return companies\n        \n    def _cleanup(self):\n        \"\"\"Clean up resources\"\"\"\n        try:\n            if self.driver:\n                self.browser_manager.close()\n                self.driver = None\n        except Exception as e:\n            logger.error(f\"Error during cleanup: {e}\")\n            \n    def _log_statistics(self):\n        \"\"\"Log scraping statistics\"\"\"\n        duration = (self.stats['end_time'] - self.stats['start_time']).total_seconds()\n        \n        logger.info(\"===== Scraping Statistics =====\")\n        logger.info(f\"Duration: {duration:.2f} seconds\")\n        logger.info(f\"Pages processed: {self.stats['pages_processed']}\")\n        logger.info(f\"Companies found: {self.stats['companies_found']}\")\n        logger.info(f\"Emails found: {self.stats['emails_found']}\")\n        logger.info(f\"Errors: {self.stats['errors']}\")\n        \n        if self.stats['companies_found'] > 0:\n            logger.info(f\"Emails per company: {self.stats['emails_found'] / self.stats['companies_found']:.2f}\")\n            \n        logger.info(\"===============================\")\n```",
+        "testStrategy": "Test the main scraper orchestration by:\n1. Verifying proper initialization of all components\n2. Testing the complete workflow with sample searches\n3. Validating error handling and recovery mechanisms\n4. Checking resource cleanup\n5. Testing statistics tracking and reporting\n6. Performing integration tests with all components",
+        "priority": "high",
+        "dependencies": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Implement Performance Optimization",
+        "description": "Optimize the scraper for efficient memory usage, parallel processing, and resource management.",
+        "details": "Implement performance optimizations including:\n1. Memory usage optimization\n2. Parallel processing for independent tasks\n3. Connection pooling\n4. Resource cleanup\n5. Caching mechanisms\n\nImplementation details:\n```python\nimport concurrent.futures\nfrom typing import Dict, List, Any, Callable\nimport logging\nimport time\nimport gc\nimport psutil\nimport os\n\nlogger = logging.getLogger(\"scraper.performance\")\n\nclass PerformanceOptimizer:\n    def __init__(self, config: Dict):\n        self.config = config\n        self.max_workers = config.get('max_workers', 4)\n        self.memory_limit_mb = config.get('memory_limit_mb', 500)\n        self.cache = {}\n        self.cache_hits = 0\n        self.cache_misses = 0\n        \n    def parallel_process(self, items: List[Any], process_func: Callable, max_workers: int = None) -> List[Any]:\n        \"\"\"Process items in parallel using a thread pool\"\"\"\n        if max_workers is None:\n            max_workers = self.max_workers\n            \n        results = []\n        \n        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:\n            future_to_item = {executor.submit(process_func, item): item for item in items}\n            \n            for future in concurrent.futures.as_completed(future_to_item):\n                item = future_to_item[future]\n                try:\n                    result = future.result()\n                    results.append(result)\n                except Exception as e:\n                    logger.error(f\"Error processing item {item}: {e}\")\n                    \n        return results\n        \n    def monitor_memory_usage(self) -> Dict:\n        \"\"\"Monitor current memory usage\"\"\"\n        process = psutil.Process(os.getpid())\n        memory_info = process.memory_info()\n        \n        memory_usage = {\n            'rss_mb': memory_info.rss / (1024 * 1024),  # RSS in MB\n            'vms_mb': memory_info.vms / (1024 * 1024),  # VMS in MB\n            'percent': process.memory_percent()\n        }\n        \n        # Log warning if memory usage exceeds limit\n        if memory_usage['rss_mb'] > self.memory_limit_mb:\n            logger.warning(f\"Memory usage exceeds limit: {memory_usage['rss_mb']:.2f}MB / {self.memory_limit_mb}MB\")\n            \n        return memory_usage\n        \n    def optimize_memory(self):\n        \"\"\"Optimize memory usage by forcing garbage collection\"\"\"\n        before = self.monitor_memory_usage()\n        \n        # Clear cache if it's too large\n        if len(self.cache) > 1000:\n            logger.info(f\"Clearing cache with {len(self.cache)} items\")\n            self.cache.clear()\n            \n        # Force garbage collection\n        gc.collect()\n        \n        after = self.monitor_memory_usage()\n        \n        logger.info(f\"Memory optimization: {before['rss_mb']:.2f}MB -> {after['rss_mb']:.2f}MB\")\n        \n    def cached_request(self, url: str, request_func: Callable, ttl_seconds: int = 3600) -> Any:\n        \"\"\"Make a cached request to avoid duplicate network calls\"\"\"\n        current_time = time.time()\n        \n        # Check if URL is in cache and not expired\n        if url in self.cache and current_time - self.cache[url]['timestamp'] < ttl_seconds:\n            self.cache_hits += 1\n            return self.cache[url]['data']\n            \n        # URL not in cache or expired, make the request\n        self.cache_misses += 1\n        result = request_func(url)\n        \n        # Store in cache\n        self.cache[url] = {\n            'data': result,\n            'timestamp': current_time\n        }\n        \n        return result\n        \n    def get_cache_stats(self) -> Dict:\n        \"\"\"Get cache statistics\"\"\"\n        total_requests = self.cache_hits + self.cache_misses\n        hit_rate = self.cache_hits / total_requests if total_requests > 0 else 0\n        \n        return {\n            'cache_size': len(self.cache),\n            'cache_hits': self.cache_hits,\n            'cache_misses': self.cache_misses,\n            'hit_rate': hit_rate\n        }\n        \n    def rate_limit(self, min_interval: float = None):\n        \"\"\"Rate limiting decorator to prevent too many requests\"\"\"\n        if min_interval is None:\n            min_interval = self.config.get('min_request_interval', 1.0)\n            \n        last_request_time = [0.0]  # Use list for mutable closure state\n        \n        def decorator(func):\n            def wrapper(*args, **kwargs):\n                current_time = time.time()\n                elapsed = current_time - last_request_time[0]\n                \n                # If not enough time has elapsed, sleep\n                if elapsed < min_interval:\n                    sleep_time = min_interval - elapsed\n                    time.sleep(sleep_time)\n                    \n                # Update last request time\n                last_request_time[0] = time.time()\n                \n                # Call the original function\n                return func(*args, **kwargs)\n                \n            return wrapper\n            \n        return decorator\n```",
+        "testStrategy": "Test the performance optimization by:\n1. Measuring memory usage with and without optimization\n2. Testing parallel processing with different workloads\n3. Validating cache functionality and hit rates\n4. Measuring request rate limiting effectiveness\n5. Testing resource cleanup mechanisms\n6. Benchmarking overall performance improvements",
+        "priority": "medium",
+        "dependencies": [
+          11
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "Implement Session Persistence and Recovery",
+        "description": "Develop functionality to persist scraping sessions and recover from failures.",
+        "details": "Create a session management module that:\n1. Saves scraping progress to disk\n2. Recovers from failures and continues scraping\n3. Implements checkpointing\n4. Manages session state\n\nImplementation details:\n```python\nimport json\nimport os\nfrom typing import Dict, List, Any\nimport logging\nfrom datetime import datetime\n\nlogger = logging.getLogger(\"scraper.session\")\n\nclass SessionManager:\n    def __init__(self, config: Dict):\n        self.config = config\n        self.session_dir = config.get('session_dir', 'sessions')\n        self.session_id = datetime.now().strftime('%Y%m%d_%H%M%S')\n        self.checkpoint_interval = config.get('checkpoint_interval', 10)  # minutes\n        self.last_checkpoint = datetime.now()\n        \n        # Create session directory if it doesn't exist\n        if not os.path.exists(self.session_dir):\n            os.makedirs(self.session_dir)\n            \n        # Session state\n        self.state = {\n            'session_id': self.session_id,\n            'start_time': datetime.now().isoformat(),\n            'last_updated': datetime.now().isoformat(),\n            'status': 'initialized',\n            'progress': {\n                'keywords_processed': [],\n                'locations_processed': [],\n                'current_keyword': None,\n                'current_location': None,\n                'current_page': 1,\n                'companies_processed': 0,\n                'emails_found': 0\n            },\n            'statistics': {\n                'pages_processed': 0,\n                'companies_found': 0,\n                'emails_found': 0,\n                'errors': 0\n            },\n            'completed_searches': [],\n            'pending_searches': [],\n            'failed_searches': []\n        }\n        \n    def get_session_file_path(self) -> str:\n        \"\"\"Get the path to the session file\"\"\"\n        return os.path.join(self.session_dir, f\"session_{self.session_id}.json\")\n        \n    def save_session(self) -> bool:\n        \"\"\"Save the current session state to disk\"\"\"\n        try:\n            # Update timestamp\n            self.state['last_updated'] = datetime.now().isoformat()\n            \n            # Save to file\n            with open(self.get_session_file_path(), 'w', encoding='utf-8') as f:\n                json.dump(self.state, f, indent=2)\n                \n            logger.info(f\"Session saved: {self.session_id}\")\n            return True\n        except Exception as e:\n            logger.error(f\"Error saving session: {e}\")\n            return False\n            \n    def load_session(self, session_id: str) -> bool:\n        \"\"\"Load a session from disk\"\"\"\n        session_path = os.path.join(self.session_dir, f\"session_{session_id}.json\")\n        \n        if not os.path.exists(session_path):\n            logger.error(f\"Session file not found: {session_path}\")\n            return False\n            \n        try:\n            with open(session_path, 'r', encoding='utf-8') as f:\n                loaded_state = json.load(f)\n                \n            self.session_id = session_id\n            self.state = loaded_state\n            \n            logger.info(f\"Session loaded: {session_id}\")\n            return True\n        except Exception as e:\n            logger.error(f\"Error loading session: {e}\")\n            return False\n            \n    def update_progress(self, keyword: str = None, location: str = None, page: int = None, \n                       companies_processed: int = None, emails_found: int = None) -> None:\n        \"\"\"Update the session progress\"\"\"\n        if keyword is not None:\n            self.state['progress']['current_keyword'] = keyword\n            \n        if location is not None:\n            self.state['progress']['current_location'] = location\n            \n        if page is not None:\n            self.state['progress']['current_page'] = page\n            \n        if companies_processed is not None:\n            self.state['progress']['companies_processed'] += companies_processed\n            self.state['statistics']['companies_found'] += companies_processed\n            \n        if emails_found is not None:\n            self.state['progress']['emails_found'] += emails_found\n            self.state['statistics']['emails_found'] += emails_found\n            \n        # Check if it's time for a checkpoint\n        now = datetime.now()\n        minutes_since_checkpoint = (now - self.last_checkpoint).total_seconds() / 60\n        \n        if minutes_since_checkpoint >= self.checkpoint_interval:\n            self.save_session()\n            self.last_checkpoint = now\n            \n    def mark_search_completed(self, keyword: str, location: str) -> None:\n        \"\"\"Mark a search as completed\"\"\"\n        search_key = f\"{keyword}|{location}\"\n        \n        if keyword not in self.state['progress']['keywords_processed']:\n            self.state['progress']['keywords_processed'].append(keyword)\n            \n        if location not in self.state['progress']['locations_processed']:\n            self.state['progress']['locations_processed'].append(location)\n            \n        if search_key not in self.state['completed_searches']:\n            self.state['completed_searches'].append(search_key)\n            \n        # Remove from pending if present\n        if search_key in self.state['pending_searches']:\n            self.state['pending_searches'].remove(search_key)\n            \n        self.save_session()\n        \n    def mark_search_failed(self, keyword: str, location: str, error: str) -> None:\n        \"\"\"Mark a search as failed\"\"\"\n        search_key = f\"{keyword}|{location}\"\n        \n        failed_search = {\n            'keyword': keyword,\n            'location': location,\n            'error': error,\n            'timestamp': datetime.now().isoformat()\n        }\n        \n        self.state['failed_searches'].append(failed_search)\n        \n        # Remove from pending if present\n        if search_key in self.state['pending_searches']:\n            self.state['pending_searches'].remove(search_key)\n            \n        self.state['statistics']['errors'] += 1\n        self.save_session()\n        \n    def get_pending_searches(self) -> List[Dict]:\n        \"\"\"Get searches that are still pending\"\"\"\n        pending = []\n        \n        for search_key in self.state['pending_searches']:\n            keyword, location = search_key.split('|')\n            pending.append({\n                'keyword': keyword,\n                'location': location\n            })\n            \n        return pending\n        \n    def initialize_pending_searches(self, keywords: List[str], locations: List[str]) -> None:\n        \"\"\"Initialize the list of pending searches\"\"\"\n        pending = []\n        \n        for keyword in keywords:\n            for location in locations:\n                search_key = f\"{keyword}|{location}\"\n                pending.append(search_key)\n                \n        self.state['pending_searches'] = pending\n        self.save_session()\n        \n    def get_session_summary(self) -> Dict:\n        \"\"\"Get a summary of the current session\"\"\"\n        now = datetime.now()\n        start_time = datetime.fromisoformat(self.state['start_time'])\n        duration_seconds = (now - start_time).total_seconds()\n        \n        return {\n            'session_id': self.session_id,\n            'status': self.state['status'],\n            'duration_seconds': duration_seconds,\n            'companies_found': self.state['statistics']['companies_found'],\n            'emails_found': self.state['statistics']['emails_found'],\n            'completed_searches': len(self.state['completed_searches']),\n            'pending_searches': len(self.state['pending_searches']),\n            'failed_searches': len(self.state['failed_searches']),\n            'error_count': self.state['statistics']['errors']\n        }\n```",
+        "testStrategy": "Test the session persistence and recovery by:\n1. Verifying session state saving and loading\n2. Testing recovery from simulated failures\n3. Validating checkpoint functionality\n4. Checking progress tracking accuracy\n5. Testing with interrupted scraping sessions\n6. Validating session statistics and reporting",
+        "priority": "medium",
+        "dependencies": [
+          11
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "Implement Comprehensive Testing Suite",
+        "description": "Develop a comprehensive testing suite for all scraper components.",
+        "details": "Create a testing suite that includes:\n1. Unit tests for all components\n2. Integration tests for component interactions\n3. Performance tests\n4. Mock services for external dependencies\n\nImplementation details:\n```python\nimport unittest\nimport pytest\nfrom unittest.mock import MagicMock, patch\nimport os\nimport tempfile\nimport json\nfrom typing import Dict, List, Any\n\n# Example test cases for different components\n\n# Config Manager Tests\nclass TestConfigManager(unittest.TestCase):\n    def setUp(self):\n        self.temp_dir = tempfile.TemporaryDirectory()\n        self.config_path = os.path.join(self.temp_dir.name, 'config.yaml')\n        \n        # Create a sample config file\n        with open(self.config_path, 'w') as f:\n            f.write(\"\"\"\n            search:\n              keywords: \"Hausverwaltung\"\n              locations: [\"Berlin\", \"Hamburg\"]\n              results_per_page: 20\n            \n            scraper:\n              delay_min: 2\n              delay_max: 5\n              max_retries: 3\n              timeout: 30\n            \n            proxies:\n              enabled: true\n              providers: [\"provider1\", \"provider2\"]\n            \"\"\")\n            \n    def tearDown(self):\n        self.temp_dir.cleanup()\n        \n    def test_load_config(self):\n        from scraper.config import ConfigManager\n        \n        config_manager = ConfigManager(self.config_path)\n        config = config_manager.get_config()\n        \n        self.assertEqual(config['search']['keywords'], \"Hausverwaltung\")\n        self.assertEqual(config['search']['locations'], [\"Berlin\", \"Hamburg\"])\n        self.assertEqual(config['scraper']['max_retries'], 3)\n        self.assertTrue(config['proxies']['enabled'])\n        \n    def test_missing_config(self):\n        from scraper.config import ConfigManager\n        \n        # Test with non-existent config file\n        config_manager = ConfigManager(\"non_existent_config.yaml\")\n        config = config_manager.get_config()\n        \n        # Should return default config\n        self.assertIn('search', config)\n        self.assertIn('scraper', config)\n        \n# Browser Manager Tests\nclass TestBrowserManager(unittest.TestCase):\n    @patch('selenium.webdriver.Chrome')\n    @patch('selenium.webdriver.chrome.service.Service')\n    @patch('webdriver_manager.chrome.ChromeDriverManager.install')\n    def test_create_driver(self, mock_install, mock_service, mock_chrome):\n        from scraper.browser import BrowserManager\n        \n        # Mock the ChromeDriverManager.install() method\n        mock_install.return_value = '/path/to/chromedriver'\n        \n        # Create a config dict\n        config = {\n            'headless': True,\n            'user_agents': [\n                \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...\"\n            ]\n        }\n        \n        # Create the BrowserManager\n        browser_manager = BrowserManager(config)\n        \n        # Get a driver\n        driver = browser_manager.get_driver()\n        \n        # Verify that Chrome was called with the expected options\n        mock_chrome.assert_called_once()\n        \n        # Verify that the driver was returned\n        self.assertEqual(driver, browser_manager.driver)\n        \n    @patch('selenium.webdriver.Chrome')\n    def test_close_driver(self, mock_chrome):\n        from scraper.browser import BrowserManager\n        \n        # Create a mock driver\n        mock_driver = MagicMock()\n        mock_chrome.return_value = mock_driver\n        \n        # Create the BrowserManager\n        browser_manager = BrowserManager({})\n        \n        # Get a driver\n        driver = browser_manager.get_driver()\n        \n        # Close the driver\n        browser_manager.close()\n        \n        # Verify that quit was called on the driver\n        mock_driver.quit.assert_called_once()\n        \n        # Verify that the driver was set to None\n        self.assertIsNone(browser_manager.driver)\n        \n# Email Extractor Tests\nclass TestEmailExtractor(unittest.TestCase):\n    def test_extract_emails_from_page(self):\n        from scraper.email_extractor import EmailExtractor\n        \n        # Create a mock driver\n        mock_driver = MagicMock()\n        mock_config = {}\n        mock_anti_detection = MagicMock()\n        \n        # Create the EmailExtractor\n        email_extractor = EmailExtractor(mock_driver, mock_config, mock_anti_detection)\n        \n        # Test HTML with various email formats\n        html_content = \"\"\"\n        <html>\n        <body>\n            <p>Contact us at info@example.com</p>\n            <p>Or email to: support@example.org</p>\n            <div data-email=\"hidden@example.net\"></div>\n            <script>var email = 'javascript@example.com';</script>\n        </body>\n        </html>\n        \"\"\"\n        \n        # Extract emails\n        emails = email_extractor._extract_emails_from_page(html_content)\n        \n        # Verify extracted emails\n        self.assertIn('info@example.com', emails)\n        self.assertIn('support@example.org', emails)\n        self.assertIn('hidden@example.net', emails)\n        self.assertIn('javascript@example.com', emails)\n        \n    def test_validate_email(self):\n        from scraper.email_extractor import EmailExtractor\n        \n        # Create a mock driver\n        mock_driver = MagicMock()\n        mock_config = {}\n        mock_anti_detection = MagicMock()\n        \n        # Create the EmailExtractor\n        email_extractor = EmailExtractor(mock_driver, mock_config, mock_anti_detection)\n        \n        # Test valid emails\n        self.assertTrue(email_extractor._validate_email('valid@example.com'))\n        self.assertTrue(email_extractor._validate_email('user.name+tag@example.co.uk'))\n        \n        # Test invalid emails\n        self.assertFalse(email_extractor._validate_email('invalid@example'))\n        self.assertFalse(email_extractor._validate_email('noreply@example.com'))\n        self.assertFalse(email_extractor._validate_email('info@example.com'))\n        \n# Integration Tests\nclass TestScraperIntegration(unittest.TestCase):\n    @patch('scraper.browser.BrowserManager')\n    @patch('scraper.anti_detection.AntiDetectionManager')\n    @patch('scraper.navigation.SearchNavigator')\n    @patch('scraper.extractors.CompanyDataExtractor')\n    @patch('scraper.email_extractor.EmailExtractor')\n    @patch('scraper.validation.DataValidator')\n    @patch('scraper.export.CSVExporter')\n    def test_scraper_workflow(self, mock_exporter, mock_validator, mock_email_extractor,\n                             mock_company_extractor, mock_navigator, mock_anti_detection,\n                             mock_browser_manager):\n        from scraper.main import Scraper\n        \n        # Create mock config\n        mock_config_path = 'mock_config.yaml'\n        \n        # Setup mock returns\n        mock_browser_manager().get_driver.return_value = MagicMock()\n        mock_navigator().iterate_search_results.return_value = [[{'name': 'Test Company'}]]\n        mock_company_extractor().extract_companies_from_page.return_value = [\n            {'name': 'Test Company', 'website': 'http://example.com'}\n        ]\n        mock_email_extractor().extract_emails_from_company.return_value = ['test@example.com']\n        mock_validator().validate_dataset.return_value = [\n            {'name': 'Test Company', 'website': 'http://example.com', 'emails': ['test@example.com']}\n        ]\n        mock_exporter().export_companies.return_value = 'output.csv'\n        \n        # Create the Scraper\n        with patch('scraper.config.ConfigManager'):\n            scraper = Scraper(mock_config_path)\n            scraper.config = {\n                'search': {\n                    'keywords': ['Hausverwaltung'],\n                    'locations': ['Berlin']\n                },\n                'log_level': 'INFO'\n            }\n            \n            # Run the scraper\n            result = scraper.run()\n            \n            # Verify the workflow\n            self.assertTrue(result)\n            mock_navigator().iterate_search_results.assert_called_once()\n            mock_company_extractor().extract_companies_from_page.assert_called_once()\n            mock_email_extractor().extract_emails_from_company.assert_called_once()\n            mock_validator().validate_dataset.assert_called_once()\n            mock_exporter().export_companies.assert_called_once()\n            \n# Performance Tests\ndef test_memory_usage():\n    from scraper.performance import PerformanceOptimizer\n    \n    # Create the PerformanceOptimizer\n    optimizer = PerformanceOptimizer({})\n    \n    # Monitor memory before\n    before = optimizer.monitor_memory_usage()\n    \n    # Create some memory pressure\n    large_list = [i for i in range(1000000)]\n    \n    # Monitor memory after\n    after = optimizer.monitor_memory_usage()\n    \n    # Optimize memory\n    optimizer.optimize_memory()\n    \n    # Monitor memory after optimization\n    optimized = optimizer.monitor_memory_usage()\n    \n    # Verify that memory usage increased and then decreased\n    assert after['rss_mb'] > before['rss_mb']\n    assert optimized['rss_mb'] < after['rss_mb']\n    \n    # Clean up\n    del large_list\n```",
+        "testStrategy": "Test the testing suite by:\n1. Running all unit tests to verify component functionality\n2. Executing integration tests to validate component interactions\n3. Running performance tests to measure resource usage\n4. Verifying test coverage across all modules\n5. Testing with both mocked and real dependencies\n6. Validating error handling and edge cases",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "Create Comprehensive Documentation",
+        "description": "Develop comprehensive documentation for the scraper, including installation guide, configuration documentation, API documentation, and usage examples.",
+        "details": "Create documentation that includes:\n1. Installation guide\n2. Configuration documentation\n3. API documentation\n4. Usage examples\n5. Troubleshooting guide\n\nImplementation details:\n```markdown\n# 11880.com Web Scraper Documentation\n\n## Table of Contents\n1. [Installation](#installation)\n2. [Configuration](#configuration)\n3. [Usage](#usage)\n4. [API Reference](#api-reference)\n5. [Troubleshooting](#troubleshooting)\n\n## Installation\n\n### Prerequisites\n- Python 3.8 or higher\n- Chrome browser installed\n\n### Step 1: Clone the Repository\n```bash\ngit clone https://github.com/yourusername/11880-scraper.git\ncd 11880-scraper\n```\n\n### Step 2: Create a Virtual Environment\n```bash\npython -m venv venv\n```\n\n### Step 3: Activate the Virtual Environment\n\n**Windows:**\n```bash\nvenv\\Scripts\\activate\n```\n\n**macOS/Linux:**\n```bash\nsource venv/bin/activate\n```\n\n### Step 4: Install Dependencies\n```bash\npip install -r requirements.txt\n```\n\n## Configuration\n\nThe scraper is configured using YAML files located in the `config` directory. The main configuration file is `config.yaml`.\n\n### Example Configuration\n\n```yaml\n# config/config.yaml\n\nsearch:\n  keywords: \"Hausverwaltung\"  # Can be a string or a list\n  locations:                  # Can be a string or a list\n    - \"Berlin\"\n    - \"Hamburg\"\n    - \"München\"\n  results_per_page: 20\n\nscraper:\n  delay_min: 2               # Minimum delay between requests (seconds)\n  delay_max: 5               # Maximum delay between requests (seconds)\n  max_retries: 3             # Number of retries for failed requests\n  timeout: 30                # Request timeout (seconds)\n  max_pages_per_site: 5      # Maximum pages to explore per company website\n  headless: true             # Run browser in headless mode\n\nproxies:\n  enabled: true              # Enable proxy rotation\n  providers:                 # List of proxy providers\n    - \"provider1\"\n    - \"provider2\"\n\nuser_agents:                 # List of user agents to rotate\n  - \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...\"\n  - \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)...\"\n\nexport:\n  format: \"csv\"              # Export format (currently only CSV supported)\n  export_dir: \"exports\"      # Directory for export files\n\nlogging:\n  level: \"INFO\"              # Logging level (DEBUG, INFO, WARNING, ERROR)\n  log_dir: \"logs\"            # Directory for log files\n\nsession:\n  session_dir: \"sessions\"    # Directory for session files\n  checkpoint_interval: 10    # Checkpoint interval in minutes\n```\n\n### Configuration Options\n\n#### Search Options\n- `keywords`: The search terms to use (string or list)\n- `locations`: The locations to search in (string or list)\n- `results_per_page`: Number of results per page (default: 20)\n\n#### Scraper Options\n- `delay_min`: Minimum delay between requests in seconds\n- `delay_max`: Maximum delay between requests in seconds\n- `max_retries`: Number of retries for failed requests\n- `timeout`: Request timeout in seconds\n- `max_pages_per_site`: Maximum pages to explore per company website\n- `headless`: Run browser in headless mode (true/false)\n\n#### Proxy Options\n- `enabled`: Enable proxy rotation (true/false)\n- `providers`: List of proxy providers\n\n#### User Agents\n- List of user agents to rotate through\n\n#### Export Options\n- `format`: Export format (currently only CSV supported)\n- `export_dir`: Directory for export files\n\n#### Logging Options\n- `level`: Logging level (DEBUG, INFO, WARNING, ERROR)\n- `log_dir`: Directory for log files\n\n#### Session Options\n- `session_dir`: Directory for session files\n- `checkpoint_interval`: Checkpoint interval in minutes\n\n## Usage\n\n### Basic Usage\n\n```bash\npython -m scraper.main --config config/config.yaml\n```\n\n### Command Line Arguments\n\n- `--config`: Path to the configuration file (default: config/config.yaml)\n- `--session`: Resume from a previous session ID\n- `--keywords`: Override keywords from config (comma-separated)\n- `--locations`: Override locations from config (comma-separated)\n- `--headless`: Run in headless mode (overrides config)\n- `--no-headless`: Run with browser visible (overrides config)\n\n### Examples\n\n#### Scrape with Specific Keywords and Locations\n\n```bash\npython -m scraper.main --config config/config.yaml --keywords \"Hausverwaltung,Immobilienverwaltung\" --locations \"Berlin,Hamburg\"\n```\n\n#### Resume a Previous Session\n\n```bash\npython -m scraper.main --session 20230101_123456\n```\n\n#### Run with Browser Visible\n\n```bash\npython -m scraper.main --no-headless\n```\n\n## API Reference\n\n### Main Modules\n\n#### `scraper.main.Scraper`\n\nThe main scraper class that orchestrates the entire scraping process.\n\n```python\nfrom scraper.main import Scraper\n\n# Initialize the scraper with a configuration file\nscraper = Scraper('config/config.yaml')\n\n# Run the scraper\nscraper.run()\n```\n\n#### `scraper.config.ConfigManager`\n\nManages configuration loading and validation.\n\n```python\nfrom scraper.config import ConfigManager\n\n# Load configuration from a file\nconfig_manager = ConfigManager('config/config.yaml')\nconfig = config_manager.get_config()\n```\n\n#### `scraper.browser.BrowserManager`\n\nManages browser instances and configurations.\n\n```python\nfrom scraper.browser import BrowserManager\n\n# Create a browser manager with configuration\nbrowser_manager = BrowserManager(config)\n\n# Get a WebDriver instance\ndriver = browser_manager.get_driver()\n\n# Close the driver when done\nbrowser_manager.close()\n```\n\n#### `scraper.navigation.SearchNavigator`\n\nHandles navigation through search results.\n\n```python\nfrom scraper.navigation import SearchNavigator\n\n# Create a navigator\nnavigator = SearchNavigator(driver, config, anti_detection_manager)\n\n# Iterate through search results\nfor results in navigator.iterate_search_results(keyword, location):\n    # Process results\n    pass\n```\n\n#### `scraper.extractors.CompanyDataExtractor`\n\nExtracts company data from search results.\n\n```python\nfrom scraper.extractors import CompanyDataExtractor\n\n# Create an extractor\nextractor = CompanyDataExtractor(driver)\n\n# Extract companies from the current page\ncompanies = extractor.extract_companies_from_page()\n```\n\n#### `scraper.email_extractor.EmailExtractor`\n\nExtracts email addresses from company websites.\n\n```python\nfrom scraper.email_extractor import EmailExtractor\n\n# Create an email extractor\nemail_extractor = EmailExtractor(driver, config, anti_detection_manager)\n\n# Extract emails from a company website\nemails = email_extractor.extract_emails_from_company(company)\n```\n\n#### `scraper.export.CSVExporter`\n\nExports data to CSV format.\n\n```python\nfrom scraper.export import CSVExporter\n\n# Create an exporter\nexporter = CSVExporter(config)\n\n# Export companies to CSV\nfilepath = exporter.export_companies(companies)\n```\n\n## Troubleshooting\n\n### Common Issues\n\n#### Scraper is Detected and Blocked\n\n**Symptoms:**\n- Many requests fail\n- No results are returned\n- CAPTCHA challenges appear\n\n**Solutions:**\n- Decrease scraping speed by increasing `delay_min` and `delay_max`\n- Enable proxy rotation by setting `proxies.enabled` to `true`\n- Add more user agents to the `user_agents` list\n- Try running with `headless: false` to see what's happening\n\n#### High Memory Usage\n\n**Symptoms:**\n- Scraper becomes slow over time\n- System resources are depleted\n- Process crashes with out-of-memory errors\n\n**Solutions:**\n- Reduce `max_pages_per_site` to limit the number of pages explored\n- Enable memory optimization by setting `performance.memory_optimization` to `true`\n- Export data more frequently to free up memory\n\n#### Incomplete Data\n\n**Symptoms:**\n- Missing email addresses\n- Incomplete company information\n\n**Solutions:**\n- Increase `max_pages_per_site` to explore more pages per company\n- Check the logs for specific errors\n- Adjust the selectors in the extractors if the website structure has changed\n\n### Logging\n\nThe scraper logs detailed information about its operation. Logs are stored in the `logs` directory by default.\n\n```bash\ntail -f logs/scraper_YYYYMMDD_HHMMSS.log\n```\n\n### Getting Help\n\nIf you encounter issues not covered in this documentation, please:\n\n1. Check the logs for error messages\n2. Review the configuration for any mistakes\n3. Open an issue on the GitHub repository with:\n   - A description of the problem\n   - Relevant log excerpts\n   - Your configuration (with sensitive information removed)\n   - Steps to reproduce the issue\n```",
+        "testStrategy": "Test the documentation by:\n1. Verifying accuracy of installation instructions\n2. Testing configuration examples\n3. Validating API usage examples\n4. Checking troubleshooting guidance\n5. Having users review for clarity and completeness\n6. Testing code examples for correctness",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-04T22:15:59.355Z",
+      "updated": "2025-07-04T22:15:59.355Z",
+      "description": "Tasks for optimization context"
+    }
+  }
+}
