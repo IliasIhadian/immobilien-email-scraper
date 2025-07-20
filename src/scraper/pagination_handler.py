@@ -40,6 +40,62 @@ class PaginationHandler:
         self.total_pages = None
         self.visited_urls = set()
 
+    async def go_to_next_page(self) -> bool:
+        """
+        Navigiert zur nächsten Seite der Suchergebnisse
+
+        Returns:
+            bool: True wenn zur nächsten Seite navigiert wurde, False wenn keine weitere Seite verfügbar ist
+        """
+        try:
+            self.logger.info(
+                f"Attempting to navigate from page {self.current_page} to next page"
+            )
+
+            # Prüfe ob wir das Maximum erreicht haben
+            if self.current_page >= self.max_pages:
+                self.logger.info(f"Reached maximum pages limit ({self.max_pages})")
+                return False
+
+            # Finde die URL der nächsten Seite
+            next_page_url = await self._get_next_page_url()
+
+            if not next_page_url:
+                self.logger.info("No next page URL found - reached end of results")
+                return False
+
+            # Vermeide Duplikate
+            if next_page_url in self.visited_urls:
+                self.logger.warning(f"Already visited URL: {next_page_url}")
+                return False
+
+            # Navigiere zur nächsten Seite
+            navigation_successful = await self._navigate_to_next_page(next_page_url)
+
+            if navigation_successful:
+                # Markiere URL als besucht
+                self.visited_urls.add(next_page_url)
+                self.current_page += 1
+
+                self.logger.info(f"Successfully navigated to page {self.current_page}")
+
+                # Prüfe ob wir noch auf einer Suchergebnisseite sind
+                if not await self._is_search_results_page():
+                    self.logger.warning("Navigation successful but not on search results page")
+                    return False
+
+                # Pause zwischen Seiten
+                await self._wait_between_pages()
+
+                return True
+            else:
+                self.logger.error("Failed to navigate to next page")
+                return False
+
+        except Exception as e:
+            self.logger.error(f"Error in go_to_next_page: {e}")
+            return False
+
     async def get_all_pages(self) -> List[str]:
         """
         Durchläuft alle verfügbaren Seiten und gibt URLs zurück

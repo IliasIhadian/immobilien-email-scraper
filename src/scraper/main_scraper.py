@@ -218,57 +218,76 @@ class MainScraper:
             while current_page <= max_pages:
                 self.logger.info(f"Processing page {current_page}")
 
-                # Auf das erste Suchergebnis klicken
-                if not await self.navigator.click_first_result():
-                    self.logger.error("Failed to click on first result")
-                    break
-
-                # Warten, bis die Detailseite geladen ist
-                try:
-                    await self.navigator.page.wait_for_load_state(
-                        "networkidle", timeout=30000
-                    )
+                # Alle Einträge auf der aktuellen Seite durchgehen (1-50)
+                for entry_index in range(1, 51):  # 1-50 Einträge pro Seite
                     self.logger.info(
-                        "Detail page loaded, waiting for content to stabilize"
-                    )
-                    await asyncio.sleep(5)  # Wait for any dynamic content
-                except Exception as e:
-                    self.logger.warning(f"Error waiting for page load: {e}")
-
-                # Daten von der Detailseite extrahieren
-                companies = await self.data_extractor.extract_all_listings_from_page()
-
-                if companies:
-                    self.logger.info(f"Successfully extracted data from detail page")
-                    all_companies.extend(companies)
-
-                    # Direkt in CSV speichern
-                    await self._export_results(companies)
-                else:
-                    self.logger.warning("No data could be extracted from detail page")
-
-                # Zurück zur Suchergebnisseite
-                if not await self.navigator.return_to_search_results():
-                    self.logger.error("Failed to return to search results")
-                    break
-
-                # Warten bis die Suchergebnisseite wieder geladen ist
-                try:
-                    await self.navigator.page.wait_for_load_state(
-                        "networkidle", timeout=30000
-                    )
-                    self.logger.info("Search results page loaded")
-                    await asyncio.sleep(5)  # Wait for any dynamic content
-                except Exception as e:
-                    self.logger.warning(
-                        f"Error waiting for search results page load: {e}"
+                        f"Processing entry {entry_index} on page {current_page}"
                     )
 
-                if test_mode and len(all_companies) >= 5:
-                    self.logger.info("Test mode: Stopping after 5 companies")
-                    break
+                    # Auf das n-te Suchergebnis klicken
+                    if not await self.navigator.click_nth_result(entry_index):
+                        self.logger.warning(
+                            f"Failed to click on result {entry_index} - possibly no more results on this page"
+                        )
+                        break  # Keine weiteren Einträge auf dieser Seite
 
-                # Zur nächsten Seite navigieren
+                    # Warten, bis die Detailseite geladen ist
+                    try:
+                        await self.navigator.page.wait_for_load_state(
+                            "networkidle", timeout=30000
+                        )
+                        self.logger.info(
+                            "Detail page loaded, waiting for content to stabilize"
+                        )
+                        await asyncio.sleep(5)  # Wait for any dynamic content
+                    except Exception as e:
+                        self.logger.warning(f"Error waiting for page load: {e}")
+
+                    # Daten von der Detailseite extrahieren
+                    companies = (
+                        await self.data_extractor.extract_all_listings_from_page()
+                    )
+
+                    if companies:
+                        self.logger.info(
+                            f"Successfully extracted data from detail page (entry {entry_index})"
+                        )
+                        all_companies.extend(companies)
+
+                        # Direkt in CSV speichern
+                        await self._export_results(companies)
+                    else:
+                        self.logger.warning(
+                            f"No data could be extracted from detail page (entry {entry_index})"
+                        )
+
+                    # Zurück zur Suchergebnisseite
+                    await self.navigator.return_to_search_results()
+                    self.logger.info("Returned to search results page")
+                    # Warten bis die Suchergebnisseite wieder geladen ist
+                    try:
+                        await self.navigator.page.wait_for_load_state(
+                            "networkidle", timeout=30000
+                        )
+                        self.logger.info("Search results page loaded")
+                        await asyncio.sleep(
+                            5
+                        )  # Reduziert von 30s auf 5s für bessere Performance
+                    except Exception as e:
+                        self.logger.warning(
+                            f"Error waiting for search results page load: {e}"
+                        )
+
+                    # Test-Modus: Stoppe nach 5 Firmen
+                    if test_mode and len(all_companies) >= 5:
+                        self.logger.info("Test mode: Stopping after 5 companies")
+                        return all_companies
+
+                    # Kleine Verzögerung zwischen den Einträgen
+                    delay = random.uniform(1, 3)  # 1-3 Sekunden zwischen Einträgen
+                    await asyncio.sleep(delay)
+
+                # Nach allen Einträgen der Seite: Zur nächsten Seite navigieren
                 has_next = await self.pagination_handler.go_to_next_page()
                 if not has_next:
                     self.logger.info("No more pages available")
@@ -277,7 +296,7 @@ class MainScraper:
                 current_page += 1
                 self.stats["pages_processed"] = current_page
 
-                # Zufällige Verzögerung zwischen Requests
+                # Zufällige Verzögerung zwischen Seiten
                 delay = random.uniform(
                     self.config["scraping"]["delay_between_requests"]["min"],
                     self.config["scraping"]["delay_between_requests"]["max"],

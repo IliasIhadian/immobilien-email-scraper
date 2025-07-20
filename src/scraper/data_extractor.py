@@ -61,20 +61,20 @@ class DataExtractor:
                 "h1.title",  # hinzugefügt für 11880
             ]
 
-            try:
-                for selector in detail_selectors:
-                    try:
-                        await self.page.wait_for_selector(
-                            selector, timeout=15000
-                        )  # Increased timeout
-                        self.logger.info(f"Found detail page indicator: {selector}")
-                        break
-                    except Exception:
-                        continue
-            except Exception:
-                self.logger.info(
-                    "Detail selectors not found, continuing with extraction attempt"
-                )
+            # try:
+            #     for selector in detail_selectors:
+            #         try:
+            #             await self.page.wait_for_selector(
+            #                 selector, timeout=15000
+            #             )  # Increased timeout
+            #             self.logger.info(f"Found detail page indicator: {selector}")
+            #             break
+            #         except Exception:
+            #             continue
+            # except Exception:
+            #     self.logger.info(
+            #         "Detail selectors not found, continuing with extraction attempt"
+            #     )
 
             # Name extrahieren
             name = ""

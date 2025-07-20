@@ -59,9 +59,10 @@ class Navigator:
         """Navigiert zu einer gegebenen Such-URL und wartet auf die Ergebnisse"""
         for attempt in range(self.max_retries):
             try:
-                # Increase initial page load timeout to 120 seconds
+                # Use domcontentloaded instead of networkidle for faster loading
+                # This allows us to start working with the page before all resources are loaded
                 response = await self.page.goto(
-                    search_url, wait_until="networkidle", timeout=30000
+                    search_url, wait_until="domcontentloaded", timeout=15000
                 )
 
                 if not response or response.status >= 400:
@@ -69,14 +70,20 @@ class Navigator:
                         f"Page returned status {response.status if response else 'None'}"
                     )
 
+                # Wait a bit for critical content to render, but don't wait for everything
+                await asyncio.sleep(3)
+
                 await self.handle_cookie_consent()
 
-                # Wait longer for the page to stabilize
-                await asyncio.sleep(5)
-
+                # Try to find search results with a reasonable timeout
+                # Don't wait too long - the page might be usable even if not fully loaded
                 success = await self._wait_for_search_results()
                 if not success:
-                    raise NavigationError("Search results did not load")
+                    # Try a second time with a shorter wait - sometimes content loads progressively
+                    await asyncio.sleep(2)
+                    success = await self._wait_for_search_results()
+                    if not success:
+                        raise NavigationError("Search results did not load")
 
                 self.logger.info(f"Successfully navigated to search URL: {search_url}")
                 return True
@@ -149,11 +156,11 @@ class Navigator:
                 ".business-entry",  # Another backup
             ]
 
-            # Try each selector with a longer timeout
+            # Try each selector with a reasonable timeout - don't wait too long
             found_selector = None
             for selector in result_selectors:
                 try:
-                    await self.page.wait_for_selector(selector, timeout=30000)
+                    await self.page.wait_for_selector(selector, timeout=10000)
                     found_selector = selector
                     break
                 except PlaywrightTimeoutError:
@@ -224,12 +231,20 @@ class Navigator:
                 self.logger.error("Could not click on any element of the first result")
                 return False
 
-            # Wait for navigation after click
+            # Wait for navigation after click, but with reasonable timeout
             try:
-                await self.page.wait_for_load_state("networkidle", timeout=30000)
+                await self.page.wait_for_load_state("domcontentloaded", timeout=15000)
                 self.logger.info("Successfully navigated to detail page")
+                # Give the page a moment to render critical content
+                await asyncio.sleep(2)
                 return True
             except PlaywrightTimeoutError:
+                # Even if we hit timeout, check if we're on a detail page
+                if "/branchenbuch/" in self.page.url and ".html" in self.page.url:
+                    self.logger.info(
+                        "Navigation successful despite timeout - already on detail page"
+                    )
+                    return True
                 self.logger.error("Timeout waiting for detail page to load")
                 return False
 
@@ -274,8 +289,8 @@ class Navigator:
             self.logger.error(f"Timeout while navigating to {url}")
             raise NavigationError(f"Could not navigate to {url}")
 
-    async def click_first_result(self) -> bool:
-        """Klickt auf das erste Suchergebnis"""
+    async def click_nth_result(self, index: int) -> bool:
+        """Klickt auf das n-te Suchergebnis (1-basiert)"""
         try:
             # Speichere die aktuelle URL als Suchergebnisseite
             self.last_search_url = self.page.url
@@ -302,14 +317,26 @@ class Navigator:
                 self.logger.error("Timeout while waiting for search results")
                 return False
 
-            # Versuche den Titel-Link zu finden und zu klicken
+            # Versuche alle Titel-Links zu finden
             link_selector = "a.result-list-entry-title.entry-detail-link"
             await self.page.wait_for_selector(link_selector, timeout=10000)
 
-            # Hole den href-Wert des Links
-            href = await self.page.evaluate(
-                f"document.querySelector('{link_selector}').getAttribute('href')"
+            # Hole alle Links
+            links = await self.page.evaluate(
+                f"""Array.from(document.querySelectorAll('{link_selector}')).map(link => link.getAttribute('href'))"""
             )
+
+            if not links:
+                self.logger.error("No search result links found")
+                return False
+
+            # Prüfe ob der gewünschte Index existiert
+            if index < 1 or index > len(links):
+                self.logger.warning(f"Result index {index} out of range (1-{len(links)})")
+                return False
+
+            # Hole den href-Wert des gewünschten Links (index-1 wegen 0-basiertem Array)
+            href = links[index - 1]
             if href:
                 # Konstruiere die vollständige URL
                 base_url = "https://www.11880.com"
@@ -317,10 +344,10 @@ class Navigator:
 
                 # Navigiere zur Detail-Seite
                 await self.navigate_to_url(full_url)
-                self.logger.info("Successfully navigated to detail page")
+                self.logger.info(f"Successfully navigated to detail page for result {index}")
                 return True
 
-            self.logger.error("Could not find detail page link")
+            self.logger.error(f"Could not find detail page link for result {index}")
             return False
 
         except PlaywrightTimeoutError:
@@ -330,20 +357,51 @@ class Navigator:
                 return True
             self.logger.error("Timeout while waiting for search results")
             return False
+        except Exception as e:
+            self.logger.error(f"Error clicking on result {index}: {str(e)}")
+            return False
+
+    async def click_first_result(self) -> bool:
+        """Klickt auf das erste Suchergebnis - Wrapper für click_nth_result"""
+        return await self.click_nth_result(1)
 
     async def return_to_search_results(self) -> bool:
-        """Kehrt zur letzten Suchergebnisseite zurück"""
+        """Kehrt zur letzten Suchergebnisseite zurück mit dem Browser-Zurück-Button"""
         try:
-            if not self.last_search_url:
-                self.logger.error("No previous search results URL found")
-                return False
+            self.logger.info("Going back to search results using browser back button")
 
-            await self.navigate_to_url(self.last_search_url)
-            self.logger.info("Successfully returned to search results page")
-            return True
+            # Verwende den Browser-Zurück-Button
+            await self.page.go_back(wait_until="domcontentloaded", timeout=15000)
+
+            # Kurz warten, damit sich die Seite stabilisiert
+            await asyncio.sleep(2)
+
+            # Prüfe ob wir wieder auf der Suchergebnisseite sind
+            # page_info = await self.get_current_page_info()
+            # if page_info["is_search_results_page"]:
+            #     self.logger.info("Successfully returned to search results page")
+            #     return True
+            # else:
+            #     self.logger.warning("Back navigation successful but not on search results page")
+            #     # Fallback: Verwende die gespeicherte URL
+            #     if self.last_search_url:
+            #         self.logger.info(f"Fallback: Navigating to saved URL: {self.last_search_url}")
+            #         await self.navigate_to_url(self.last_search_url)
+            #         return True
+            #     return False
 
         except Exception as e:
-            self.logger.error(f"Error returning to search results: {str(e)}")
+            self.logger.error(f"Error going back to search results: {str(e)}")
+            # Fallback: Verwende die gespeicherte URL
+            try:
+                if self.last_search_url:
+                    self.logger.info(
+                        f"Fallback: Navigating to saved URL: {self.last_search_url}"
+                    )
+                    await self.navigate_to_url(self.last_search_url)
+                    return True
+            except Exception as fallback_error:
+                self.logger.error(f"Fallback navigation also failed: {fallback_error}")
             return False
 
     async def search_for_term(self, search_term: str, location: str = "") -> bool:
